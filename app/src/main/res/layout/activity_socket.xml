@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="disconnect"
+            android:text="断开连接" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="get_status"
+            android:text="查询状态" />
+
+        <Button
+            android:id="@+id/bt_rotate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="get_GPS"
+            android:text="查询GPS定位" />
+
+        <Button
+            android:id="@+id/bt_set_speed"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="set_speed"
+            android:text="线性速度和角速度" />
+
+        <Button
+            android:id="@+id/bt_set_distance"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="set_distance"
+            android:text="设置特定距离和角度" />
+
+        <Button
+            android:id="@+id/bt_set_work_mode"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="set_work_mode"
+            android:text="模式控制包" />
+
+        <Button
+            android:id="@+id/bt_set_goal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="set_goal"
+            android:text="设置目标" />
+
+        <Button
+            android:id="@+id/bt_set_max_speed"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="set_max_speed"
+            android:text="设置最大速度" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="查询地图"
+            android:onClick="get_map"/>
+
+        <ImageView
+            android:id="@+id/iv_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+</ScrollView>
