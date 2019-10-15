@@ -117,9 +117,29 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 //            }
 //        }).start();
 
-        handerMap(tcpMsg);
+        TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(),TypeEntity.class);
+        handerEntity(typeEntity,tcpMsg);
+        //handerMap(tcpMsg);
 
 
+    }
+
+    private void handerEntity(TypeEntity typeEntity,TcpMsg tcpMsg) {
+        switch (typeEntity.getType()){
+            case Contanst.GET_STATUS:
+                SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(),SatusEntity.class);
+                Toast.makeText(this,"状态",Toast.LENGTH_SHORT).show();
+                break;
+            case Contanst.GET_MAP:
+                Toast.makeText(this,"地图",Toast.LENGTH_SHORT).show();
+                break;
+            case Contanst.GET_GPS:
+                Toast.makeText(this,"GPS",Toast.LENGTH_SHORT).show();
+                break;
+            case Contanst.GET_PATH:
+                Toast.makeText(this,"路径",Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     private void handerMap(TcpMsg tcpMsg) {
@@ -255,6 +275,10 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 
     public void get_map(View view) {
         ControlSendManager.get_map();
+    }
+
+    public void get_path(View view){
+        ControlSendManager.get_path();
     }
 }
 

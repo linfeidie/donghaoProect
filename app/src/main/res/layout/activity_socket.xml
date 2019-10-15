@@ -12,8 +12,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:onClick="disconnect"
-            android:text="断开连接" />
+            android:onClick="get_path"
+            android:text="查询路径" />
 
         <Button
             android:layout_width="match_parent"

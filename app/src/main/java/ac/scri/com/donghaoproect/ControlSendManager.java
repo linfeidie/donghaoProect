@@ -21,7 +21,7 @@ import com.blanke.xsocket.utils.StringValidationUtils;
 public class ControlSendManager {
     private static XTcpClient xTcpClient;
     private static Context mContext;
-    private static int id = -8;
+    private static int id = -9;
 
     public static void  init(Context context, TcpClientListener listener){
         mContext = context;
@@ -85,7 +85,11 @@ public class ControlSendManager {
     }
     //查询状态
     public static void get_status(){
-        send_order(0,"get_status");
+        send_order(1,"get_status");
+    }
+
+    public static void get_path(){
+        send_order(1,"get_path");
     }
 
     public static void get_map(){
