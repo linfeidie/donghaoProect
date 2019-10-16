@@ -33,11 +33,10 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     private Button bt_rotate;
     private boolean isConnect = false;
     private List<MapdataEntity> mapdataEntities = new ArrayList<>();
-    private String incompleteJson = "";
+    private StringBuffer incompleteJson = new StringBuffer();
     private int packNum = -1;
     private MapdataEntity supperMapData;
     private ImageView iv_map;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,14 +47,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
         // startGetGSP();
         bt_rotate = findViewById(R.id.bt_rotate);
         iv_map = (ImageView) findViewById(R.id.iv_map);
-        final Runnable r = new Runnable() {
 
-            @Override
-            public void run() {
-                Toast.makeText(SocetTestActivity.this, "22", Toast.LENGTH_SHORT).show();
-                //每隔1s循环执行run方法
-            }
-        };
         bt_rotate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -63,7 +55,12 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        TimerManager.getInstance().postDelayed(r);
+                        TimerManager.getInstance().start(new LooperRunnable() {
+                            @Override
+                            public void call() {
+                                Log.e("linfd","11111121");
+                            }
+                        });
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
@@ -71,7 +68,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
                         TimerManager.getInstance().removeMessage();
                         break;
                 }
-                return false;
+                return true;
             }
         });
 
@@ -117,27 +114,27 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 //            }
 //        }).start();
 
-        TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(),TypeEntity.class);
-        handerEntity(typeEntity,tcpMsg);
-        //handerMap(tcpMsg);
+       // TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
+        //handerEntity(typeEntity, tcpMsg);
+        handerMap(tcpMsg);
 
 
     }
 
-    private void handerEntity(TypeEntity typeEntity,TcpMsg tcpMsg) {
-        switch (typeEntity.getType()){
+    private void handerEntity(TypeEntity typeEntity, TcpMsg tcpMsg) {
+        switch (typeEntity.getType()) {
             case Contanst.GET_STATUS:
-                SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(),SatusEntity.class);
-                Toast.makeText(this,"状态",Toast.LENGTH_SHORT).show();
+                SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), SatusEntity.class);
+                Toast.makeText(this, "状态", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_MAP:
-                Toast.makeText(this,"地图",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "地图", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_GPS:
-                Toast.makeText(this,"GPS",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "GPS", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_PATH:
-                Toast.makeText(this,"路径",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "路径", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -159,19 +156,19 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
                 if (attr[i].endsWith("}")) {
                     MapdataEntity entity = null;
                     try {
-                        entity = GsonUtil.GsonToBean(incompleteJson.concat(attr[i]), MapdataEntity.class);
+                        entity = GsonUtil.GsonToBean(incompleteJson.append(attr[i]).toString(), MapdataEntity.class);
                         mapdataEntities.add(entity);
-                        incompleteJson = "";
+                        incompleteJson.setLength(0);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 } else {
-                    incompleteJson.concat(attr[i]);
+                    incompleteJson.append(attr[i]);
                 }
 
             } else if (attr[i].startsWith("{\"data\"")) {
-                incompleteJson = attr[i];
+                incompleteJson.append(attr[i]);
             }
         }
 
@@ -199,27 +196,27 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
             mapdataEntities.clear();
             Toast.makeText(this, "完成拼接", Toast.LENGTH_SHORT).show();
             new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
-                    @Override
-                    public void getMap(final Bitmap map) {
-                        SocetTestActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                iv_map.setImageBitmap(map);
-                                Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
-                                Log.e("linfd", "完成拼接");
-                            }
-                        });
+                @Override
+                public void run() {
+                    ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+                        @Override
+                        public void getMap(final Bitmap map) {
+                            SocetTestActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    iv_map.setImageBitmap(map);
+                                    Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
+                                    Log.e("linfd", "完成拼接");
+                                }
+                            });
 
-                    }
-                });
-            }
-        }).start();
+                        }
+                    });
+                }
+            }).start();
 
         }
-        if(mapdataEntities.size() > packNum) {
+        if (mapdataEntities.size() > packNum) {
             mapdataEntities.clear();
         }
     }
@@ -277,7 +274,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
         ControlSendManager.get_map();
     }
 
-    public void get_path(View view){
+    public void get_path(View view) {
         ControlSendManager.get_path();
     }
 }
