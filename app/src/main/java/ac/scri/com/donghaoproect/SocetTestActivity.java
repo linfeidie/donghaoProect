@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -116,9 +115,44 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 
        // TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
         //handerEntity(typeEntity, tcpMsg);
-        handerMap(tcpMsg);
+       // handerMap(tcpMsg);
+        if(tcpMsg.getSourceDataString().startsWith("{") && tcpMsg.getSourceDataString().endsWith("}")) {
+            TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
+            handerEntity(typeEntity, tcpMsg);
+        }else{
+            SpliceMap(tcpMsg);
+        }
 
 
+
+    }
+
+    private void SpliceMap(TcpMsg tcpMsg) {
+        HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
+            @Override
+            public void MapDateFinish(final MapdataEntity supperMapData) {
+                Toast.makeText(SocetTestActivity.this, "完成拼接", Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+                            @Override
+                            public void getMap(final Bitmap map) {
+                                SocetTestActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv_map.setImageBitmap(map);
+                                        Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
+                                        Log.e("linfd", "完成拼接");
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                }).start();
+            }
+        }).handerMap(tcpMsg);
     }
 
     private void handerEntity(TypeEntity typeEntity, TcpMsg tcpMsg) {
@@ -129,6 +163,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
                 break;
             case Contanst.GET_MAP:
                 Toast.makeText(this, "地图", Toast.LENGTH_SHORT).show();
+                SpliceMap(tcpMsg);
                 break;
             case Contanst.GET_GPS:
                 Toast.makeText(this, "GPS", Toast.LENGTH_SHORT).show();
@@ -139,87 +174,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
         }
     }
 
-    private void handerMap(TcpMsg tcpMsg) {
-        String[] attr = tcpMsg.getSourceDataString().split("\n");
-        for (int i = 0; i < attr.length; i++) {
-            if (attr[i].startsWith("{\"data\"") && attr[i].endsWith("}")) {
 
-                MapdataEntity entity = null;
-                try {
-                    entity = GsonUtil.GsonToBean(attr[i], MapdataEntity.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                packNum = entity.getPack_num();
-                mapdataEntities.add(entity);
-            } else if (!attr[i].startsWith("{\"data\"") && !TextUtils.isEmpty(incompleteJson)) {
-                if (attr[i].endsWith("}")) {
-                    MapdataEntity entity = null;
-                    try {
-                        entity = GsonUtil.GsonToBean(incompleteJson.append(attr[i]).toString(), MapdataEntity.class);
-                        mapdataEntities.add(entity);
-                        incompleteJson.setLength(0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    incompleteJson.append(attr[i]);
-                }
-
-            } else if (attr[i].startsWith("{\"data\"")) {
-                incompleteJson.append(attr[i]);
-            }
-        }
-
-//        Toast.makeText(this, tcpMsg.toString(), Toast.LENGTH_SHORT).show();
-//        if (entity.getType().equals("map")) {
-//            MapdataEntity copyEntity = null;
-//            if (entity.getPack_count() == 1) {
-//                copyEntity = entity;
-//            } else {
-//                copyEntity.getData().addAll(entity.getData());
-//            }
-//            Toast.makeText(this, "完成拼接", Toast.LENGTH_SHORT).show();
-//        }
-
-        if (mapdataEntities.size() == packNum) {
-
-            for (int i = 0; i < packNum; i++) {
-                if (i == 0) {
-                    supperMapData = mapdataEntities.get(0);
-                } else {
-                    supperMapData.getData().addAll(mapdataEntities.get(i).getData());
-                }
-
-            }
-            mapdataEntities.clear();
-            Toast.makeText(this, "完成拼接", Toast.LENGTH_SHORT).show();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
-                        @Override
-                        public void getMap(final Bitmap map) {
-                            SocetTestActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    iv_map.setImageBitmap(map);
-                                    Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
-                                    Log.e("linfd", "完成拼接");
-                                }
-                            });
-
-                        }
-                    });
-                }
-            }).start();
-
-        }
-        if (mapdataEntities.size() > packNum) {
-            mapdataEntities.clear();
-        }
-    }
 
 
     @Override

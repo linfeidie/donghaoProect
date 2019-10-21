@@ -39,7 +39,7 @@ public class HandleSubpackageManager {
         this.listener = listener;
     }
 
-    private void handerMap(TcpMsg tcpMsg) {
+    public void handerMap(TcpMsg tcpMsg) {
         String[] attr = tcpMsg.getSourceDataString().split("\n");
         for (int i = 0; i < attr.length; i++) {
             if (attr[i].startsWith("{\"data\"") && attr[i].endsWith("}")) {

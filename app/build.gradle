@@ -32,4 +32,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.Blankeer:XAndroidSocket:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
+    compile 'com.github.bestTao:CoordinatorMenu:v1.0.2'
 }
