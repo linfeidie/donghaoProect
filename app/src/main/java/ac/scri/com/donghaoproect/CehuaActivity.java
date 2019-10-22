@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qiantao.coordinatormenu.CoordinatorMenu;
 
@@ -31,11 +33,53 @@ public class CehuaActivity extends AppCompatActivity {
     private CoordinatorMenu mCoordinatorMenu;
     private ArrayList<Fragment> pages = null;
     private CommnetViewPager viewpager = null;
+    private RegionView mRegionView;
+    private IPView ipView;
+
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cehua);
+        ipView = findViewById(R.id.ipView);
+
+        mRegionView = (RegionView) findViewById(R.id.regionView);
+
+        mRegionView.setListener(new RegionView.RegionViewClickListener() {
+
+            @Override
+            public void clickTop() {
+                showToast("view clickTop");
+                Log.e("linfd",ipView.getBytesWithIP().toString());
+                Log.e("linfd",new String(ipView.getBytesWithIP()));;
+            }
+
+            @Override
+            public void clickRight() {
+                //  showToast("view clickRight");
+            }
+
+            @Override
+            public void clickRightDown() {
+                showToast("view clickRightwdown");
+            }
+
+            @Override
+            public void clickLeft() {
+                showToast("view clickLeft");
+            }
+
+            @Override
+            public void clickCenter() {
+                showToast("view clickCenter");
+            }
+
+            @Override
+            public void clickBottom() {
+                showToast("view clickBottom");
+            }
+        });
         pages = new ArrayList<Fragment>();
         mCoordinatorMenu = (CoordinatorMenu) findViewById(R.id.menu);
         viewpager = findViewById(R.id.viewpager);
@@ -108,5 +152,15 @@ public class CehuaActivity extends AppCompatActivity {
         public Fragment getItem(int arg0) {
             return pages.get(arg0);
         }
+    }
+
+    private void showToast(String message) {
+        if (mToast == null) {
+            mToast = Toast.makeText(CehuaActivity.this, message,
+                    Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(message);
+        }
+        mToast.show();
     }
 }

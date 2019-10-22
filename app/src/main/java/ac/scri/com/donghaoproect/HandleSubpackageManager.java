@@ -38,7 +38,7 @@ public class HandleSubpackageManager {
         mapdataEntities = new ArrayList<>();
         this.listener = listener;
     }
-
+    //主要方法
     public void handerMap(TcpMsg tcpMsg) {
         String[] attr = tcpMsg.getSourceDataString().split("\n");
         for (int i = 0; i < attr.length; i++) {

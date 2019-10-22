@@ -1,6 +1,5 @@
 package ac.scri.com.donghaoproect;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +14,6 @@ import com.blanke.xsocket.tcp.client.XTcpClient;
 import com.blanke.xsocket.tcp.client.bean.TcpMsg;
 import com.blanke.xsocket.tcp.client.listener.TcpClientListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,11 +28,8 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     public static final String TAG = SocetTestActivity.class.getSimpleName();
     private Button bt_rotate;
     private boolean isConnect = false;
-    private List<MapdataEntity> mapdataEntities = new ArrayList<>();
-    private StringBuffer incompleteJson = new StringBuffer();
-    private int packNum = -1;
-    private MapdataEntity supperMapData;
     private ImageView iv_map;
+    private boolean isFirst = true ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +77,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
         isConnect = true;
         Toast.makeText(this, xTcpClient.getTargetInfo().getIp() + "连接成功", Toast.LENGTH_SHORT).show();
         ControlSendManager.set_online();
+        ControlSendManager.set_connet();
     }
 
     @Override
@@ -98,6 +93,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
 
     @Override
     public void onReceive(XTcpClient xTcpClient, final TcpMsg tcpMsg) {
+
         //Log.e("bm", "runnable线程： " + Thread.currentThread().getId() + " name:" + Thread.currentThread().getName());
 //        ThreadManager.getInstance().createLongPool().execute(new Runnable() {
 //            @Override
@@ -116,10 +112,39 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
        // TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
         //handerEntity(typeEntity, tcpMsg);
        // handerMap(tcpMsg);
-        if(tcpMsg.getSourceDataString().startsWith("{") && tcpMsg.getSourceDataString().endsWith("}")) {
-            TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
-            handerEntity(typeEntity, tcpMsg);
+        if(isFirst && tcpMsg.getSourceDataString().contains("{\"data\":")) {
+           String[] source =  tcpMsg.getSourceDataString().split("\n");
+            handerEntity(GsonUtil.GsonToBean(source[1], TypeEntity.class), tcpMsg);
+           tcpMsg.setSourceDataString(tcpMsg.getSourceDataString().substring(tcpMsg.getSourceDataString().indexOf("{\"data\":")));
+           isFirst =false;
+        }
+        if(tcpMsg.getSourceDataString().startsWith("{") && tcpMsg.getSourceDataString().trim().endsWith("}")) {
+            TypeEntity typeEntity = null;
+
+                String[] data = tcpMsg.getSourceDataString().split("\n");
+                if(data.length > 1) {
+                    Toast.makeText(this,"222",Toast.LENGTH_SHORT).show();
+                }
+                for (int i = 0; i < data.length ; i++) {
+                    typeEntity = GsonUtil.GsonToBean(data[i], TypeEntity.class);
+                    handerEntity(typeEntity, tcpMsg);
+                }
+
+
+
         }else{
+
+//            String[] data = tcpMsg.getSourceDataString().split("\n");
+//            TypeEntity typeEntity = null;
+//            for (int i = 0; i < data.length -1 ; i++) {
+//                typeEntity = GsonUtil.GsonToBean(data[i], TypeEntity.class);
+//                handerEntity(typeEntity, tcpMsg);
+//            }
+
+
+            Toast.makeText(this,"3333",Toast.LENGTH_SHORT).show();
+
+
             SpliceMap(tcpMsg);
         }
 
@@ -132,25 +157,26 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
             @Override
             public void MapDateFinish(final MapdataEntity supperMapData) {
                 Toast.makeText(SocetTestActivity.this, "完成拼接", Toast.LENGTH_SHORT).show();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
-                            @Override
-                            public void getMap(final Bitmap map) {
-                                SocetTestActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        iv_map.setImageBitmap(map);
-                                        Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
-                                        Log.e("linfd", "完成拼接");
-                                    }
-                                });
-
-                            }
-                        });
-                    }
-                }).start();
+                Log.e("linfd","完成拼接");
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+//                            @Override
+//                            public void getMap(final Bitmap map) {
+//                                SocetTestActivity.this.runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        iv_map.setImageBitmap(map);
+//                                        Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
+//                                        Log.e("linfd", "完成拼接");
+//                                    }
+//                                });
+//
+//                            }
+//                        });
+//                    }
+//                }).start();
             }
         }).handerMap(tcpMsg);
     }
@@ -158,18 +184,34 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     private void handerEntity(TypeEntity typeEntity, TcpMsg tcpMsg) {
         switch (typeEntity.getType()) {
             case Contanst.GET_STATUS:
-                SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), SatusEntity.class);
+                //SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), SatusEntity.class);
                 Toast.makeText(this, "状态", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_MAP:
                 Toast.makeText(this, "地图", Toast.LENGTH_SHORT).show();
-                SpliceMap(tcpMsg);
+               // SpliceMap(tcpMsg);
                 break;
             case Contanst.GET_GPS:
                 Toast.makeText(this, "GPS", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_PATH:
                 Toast.makeText(this, "路径", Toast.LENGTH_SHORT).show();
+                break;
+            case Contanst.GET_MAP_PARAM:
+                Toast.makeText(this, "地图包信息", Toast.LENGTH_SHORT).show();
+                String[] source =  tcpMsg.getSourceDataString().split("\n");
+                MapParamEntity mapParamEntity = GsonUtil.GsonToBean(source[1],MapParamEntity.class);
+                Contanst.MAPPARAMENTITY = mapParamEntity;
+
+                Log.e("linfd","地图包信息");
+                break;
+            case Contanst.MAP_DATA:
+                Toast.makeText(this, "地图数据", Toast.LENGTH_SHORT).show();
+                Log.e("linfd","地图数据");
+                SpliceMap(tcpMsg);
+                break;
+            case Contanst.SCAN:
+                Toast.makeText(this, "激光", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -230,7 +272,12 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     }
 
     public void get_path(View view) {
-        ControlSendManager.get_path();
+       // ControlSendManager.get_path();
+        String s = "{\"angular_speed\":0,\"axis_x\":-0.34514641761779785,\"axis_y\":-0.67194199562072754,\"axis_z\":0,\"battery_percent\":27,\"battery_volt\":26,\"from_id\":1,\"linear_speed\":0,\"robot_state\":{\"charging_state\":true,\"driver_fail\":false,\"emergency_stop\":false,\"goal_reach\":false,\"lidar_exception\":false,\"motor_overload\":false,\"path_fail\":false,\"slam_exception\":false},\"robot_yaw\":1.512751579284668,\"to_id\":0,\"type\":\"robot_status\",\"work_mode\":\"navi_straight\"}\n" +
+                "{\"from_id\":1,\"height\":1728,\"origin\":{\"x\":-77.200000000000003,\"y\":-21.199999999999999,\"z\":0},\"pack_id\":1,\"pack_num\":342,\"resolution\":0.05000000074505806,\"to_id\":0,\"type\":\"map_param\",\"width\":1728}\n" +
+                "{\"data\":[64164,-1,1,100,172";
+        String ss = s.substring(s.indexOf("{\"data\":"));
+        Log.e("linfd",ss);
     }
 }
 

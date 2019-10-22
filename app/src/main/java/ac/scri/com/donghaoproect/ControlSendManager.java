@@ -83,6 +83,11 @@ public class ControlSendManager {
     public static  void set_online(){
         send_order(0,"set_online");
     }
+
+    //设置连接机器
+    public static  void set_connet(){
+        send_order(1,"set_connet");
+    }
     //查询状态
     public static void get_status(){
         send_order(1,"get_status");

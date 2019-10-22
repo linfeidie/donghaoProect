@@ -10,10 +10,52 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="#9ED5E4"/>
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
+          <TextView
+              android:layout_width="match_parent"
+              android:text="工作模式"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="电量"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="电压"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="线速度"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="角速度"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="充电状态"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="小车编号"
+              android:layout_height="match_parent" />
+          <TextView
+              android:layout_width="match_parent"
+              android:text="222"
+              android:layout_height="match_parent" />
+          <ac.scri.com.donghaoproect.IPView
+              android:layout_width="match_parent"
+              android:id="@+id/ipView"
+              android:layout_height="40dp"
+              android:layout_margin="10dp"></ac.scri.com.donghaoproect.IPView>
+      </LinearLayout>
+  </ScrollView>
 
-   <TextView
-       android:layout_width="match_parent"
-       android:text="我是侧滑页面"
-       android:layout_height="match_parent" />
 
 </LinearLayout>

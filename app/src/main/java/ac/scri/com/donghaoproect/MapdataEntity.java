@@ -4,34 +4,28 @@ import java.util.List;
 
 /**
  * 文件描述：.
- * <p>
+ * <p>  新的数据格式  没有地图信息
  * 作者：Created by 林飞堞 on 2019/10/8
  * <p>
  * 版本号：donghaoProect
  */
 public class MapdataEntity extends TypeEntity{
 
+
     /**
-     * data : [64164,-1,1,100,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1727,-1,1,0,1726,-1,1,0,1727,-1,1,0,1720,-1,7,100,1721,-1,14,100,24,-1,5,100,1685,-1,1,100,6,0,14,100,1,-1,1,100,14,-1,13,100,1678,-1,1,100,14,0,16,100,6,-1,1,0,1,100,7,0,10,100,1672,-1,1,100,21,0,14,100,1,-1,1,0,1,100,15,0,3,100,1670,-1,2,100,30,0,8,100,16,0,1,100,1,0,1534,-1,11,100,1,0,124,-1,2,100,35,0,2,100,17,0,2,100,1533,-1,1,100,1,0,1,-1,13,0,121,-1,2,100,55,0,1,100,1535,-1]
+     * data : [1672,-1,1,0,2,-1,1,0,17,-1,3,0,27,-1,5,0,1672,-1,1,0,2,-1,1,0,16,-1,3,0,28,-1,2,100,3,0,1671,-1,1,0,2,-1,1,0,17,-1,3,0,29,-1,1,100,1,0,1,100,2,0,1670,-1,1,100,2,-1,1,0,17,-1,3,0,29,-1,2,100,3,0,1672,-1,1,0,17,-1,3,0,31,-1,1,0,1,100,2,0,1690,-1,3,0,31,-1,1,100,3,0,1690,-1,3,0,32,-1,3,0,1689,-1,3,0,33,-1,1,0,1,-1,1,0,1689,-1,3,0,33,-1,1,0,1,-1,1,0,1689,-1,3,0,33,-1,1,0,1,-1,1,0,1688,-1,3,0,34,-1,1,0,1,-1,2,0,1687,-1,3,0,34,-1,1,0,1,-1,2,0,1687,-1,3,0,34,-1,1,0,1,-1,2,0,1686,-1,3,0,35,-1,1,0,1,-1,2,0,1686,-1,3,0,35,-1,1,0,1,-1,2,0,1685,-1,3,0,36,-1,1,0,1,-1,2,0,1685,-1,3,0,36,-1,1,0,2,-1,1,0,1685,-1,3,0,36,-1,1,0,2,-1,1,0,1684,-1,3,0,37,-1,1,0,2,-1,2,0,1683,-1,3,0]
      * from_id : 1
-     * height : 1728
-     * origin : {"x":-77.2,"y":-21.2,"z":0}
-     * pack_count : 1
+     * pack_count : 341
+     * pack_id : 1
      * pack_num : 342
-     * resolution : 0.05000000074505806
-     * to_id : -3
-     * type : map
-     * width : 1728
+     * to_id : 0
      */
 
     private int from_id;
-    private int height;
-    private OriginEntity origin;
     private int pack_count;
+    private int pack_id;
     private int pack_num;
-    private double resolution;
     private int to_id;
-    private int width;
     private List<Integer> data;
 
     public int getFrom_id() {
@@ -42,28 +36,20 @@ public class MapdataEntity extends TypeEntity{
         this.from_id = from_id;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public OriginEntity getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(OriginEntity origin) {
-        this.origin = origin;
-    }
-
     public int getPack_count() {
         return pack_count;
     }
 
     public void setPack_count(int pack_count) {
         this.pack_count = pack_count;
+    }
+
+    public int getPack_id() {
+        return pack_id;
+    }
+
+    public void setPack_id(int pack_id) {
+        this.pack_id = pack_id;
     }
 
     public int getPack_num() {
@@ -74,14 +60,6 @@ public class MapdataEntity extends TypeEntity{
         this.pack_num = pack_num;
     }
 
-    public double getResolution() {
-        return resolution;
-    }
-
-    public void setResolution(double resolution) {
-        this.resolution = resolution;
-    }
-
     public int getTo_id() {
         return to_id;
     }
@@ -90,56 +68,11 @@ public class MapdataEntity extends TypeEntity{
         this.to_id = to_id;
     }
 
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     public List<Integer> getData() {
         return data;
     }
 
     public void setData(List<Integer> data) {
         this.data = data;
-    }
-
-    public static class OriginEntity {
-        /**
-         * x : -77.2
-         * y : -21.2
-         * z : 0
-         */
-
-        private double x;
-        private double y;
-        private int z;
-
-        public double getX() {
-            return x;
-        }
-
-        public void setX(double x) {
-            this.x = x;
-        }
-
-        public double getY() {
-            return y;
-        }
-
-        public void setY(double y) {
-            this.y = y;
-        }
-
-        public int getZ() {
-            return z;
-        }
-
-        public void setZ(int z) {
-            this.z = z;
-        }
     }
 }
