@@ -1,9 +1,5 @@
 package ac.scri.com.donghaoproect;
 
-import android.text.TextUtils;
-
-import com.blanke.xsocket.tcp.client.bean.TcpMsg;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,39 +34,14 @@ public class HandleSubpackageManager {
         mapdataEntities = new ArrayList<>();
         this.listener = listener;
     }
+    MapdataEntity entity = null;
     //主要方法
-    public void handerMap(TcpMsg tcpMsg) {
-        String[] attr = tcpMsg.getSourceDataString().split("\n");
-        for (int i = 0; i < attr.length; i++) {
-            if (attr[i].startsWith("{\"data\"") && attr[i].endsWith("}")) {
+    public void handerMap(String messageJson) {
 
-                MapdataEntity entity = null;
-                try {
-                    entity = GsonUtil.GsonToBean(attr[i], MapdataEntity.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                packNum = entity.getPack_num();
-                mapdataEntities.add(entity);
-            } else if (!attr[i].startsWith("{\"data\"") && !TextUtils.isEmpty(incompleteJson)) {
-                if (attr[i].endsWith("}")) {
-                    MapdataEntity entity = null;//incompleteJson.append(attr[i])
-                    try {
-                        entity = GsonUtil.GsonToBean(incompleteJson.append(attr[i]).toString(), MapdataEntity.class);
-                        mapdataEntities.add(entity);
-                        incompleteJson.setLength(0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
 
-                } else {
-                    incompleteJson.append(attr[i]);
-                }
-
-            } else if (attr[i].startsWith("{\"data\"")) {
-                incompleteJson.append(attr[i]);
-            }
-        }
+        entity = GsonUtil.GsonToBean(messageJson, MapdataEntity.class);
+        packNum = entity.getPack_num();
+        mapdataEntities.add(entity);
 
         if (mapdataEntities.size() == packNum) {
 

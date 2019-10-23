@@ -1,8 +1,10 @@
 package ac.scri.com.donghaoproect;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +31,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     private Button bt_rotate;
     private boolean isConnect = false;
     private ImageView iv_map;
-    private boolean isFirst = true ;
+    private StringBuffer incompleteJson = new StringBuffer();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,94 +96,68 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
     @Override
     public void onReceive(XTcpClient xTcpClient, final TcpMsg tcpMsg) {
 
-        //Log.e("bm", "runnable线程： " + Thread.currentThread().getId() + " name:" + Thread.currentThread().getName());
-//        ThreadManager.getInstance().createLongPool().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                handerMap(tcpMsg);
-//            }
-//        });
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                handerMap(tcpMsg);
-//            }
-//        }).start();
+        String[] packages = tcpMsg.getSourceDataString().split("\n");
+        String message ;
+        TypeEntity typeEntity = null;
+        for (int i = 0; i < packages.length; i++) {
+            message = packages[i];
+            if(message.startsWith("{") && message.endsWith("}")) {//有开头 有结尾
+                typeEntity = GsonUtil.GsonToBean(message, TypeEntity.class);
+                handerEntity(typeEntity, message);
+            }else if(message.startsWith("{") && !message.endsWith("}")) {//有开头 没结尾
+                incompleteJson.append(message);//追加
+            }else if(!message.startsWith("{") && message.endsWith("}") && incompleteJson.length() != 0) {//没开头，但有结尾
+                String completeJson = incompleteJson.append(message).toString();
+                typeEntity = GsonUtil.GsonToBean(completeJson, MapdataEntity.class);
+                incompleteJson.setLength(0);
+                handerEntity(typeEntity, completeJson);
+            }else if(!message.startsWith("{") && !message.endsWith("}")){
+                incompleteJson.append(message);//追加
+            }else {
+                Toast.makeText(this,"其他情况",Toast.LENGTH_SHORT).show();
+                Log.e("linfd","其他情况");
+            }
 
-       // TypeEntity typeEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), TypeEntity.class);
-        //handerEntity(typeEntity, tcpMsg);
-       // handerMap(tcpMsg);
-        if(isFirst && tcpMsg.getSourceDataString().contains("{\"data\":")) {
-           String[] source =  tcpMsg.getSourceDataString().split("\n");
-            handerEntity(GsonUtil.GsonToBean(source[1], TypeEntity.class), tcpMsg);
-           tcpMsg.setSourceDataString(tcpMsg.getSourceDataString().substring(tcpMsg.getSourceDataString().indexOf("{\"data\":")));
-           isFirst =false;
-        }
-        if(tcpMsg.getSourceDataString().startsWith("{") && tcpMsg.getSourceDataString().trim().endsWith("}")) {
-            TypeEntity typeEntity = null;
-
-                String[] data = tcpMsg.getSourceDataString().split("\n");
-                if(data.length > 1) {
-                    Toast.makeText(this,"222",Toast.LENGTH_SHORT).show();
-                }
-                for (int i = 0; i < data.length ; i++) {
-                    typeEntity = GsonUtil.GsonToBean(data[i], TypeEntity.class);
-                    handerEntity(typeEntity, tcpMsg);
-                }
-
-
-
-        }else{
-
-//            String[] data = tcpMsg.getSourceDataString().split("\n");
-//            TypeEntity typeEntity = null;
-//            for (int i = 0; i < data.length -1 ; i++) {
-//                typeEntity = GsonUtil.GsonToBean(data[i], TypeEntity.class);
-//                handerEntity(typeEntity, tcpMsg);
-//            }
-
-
-            Toast.makeText(this,"3333",Toast.LENGTH_SHORT).show();
-
-
-            SpliceMap(tcpMsg);
         }
 
 
 
     }
 
-    private void SpliceMap(TcpMsg tcpMsg) {
+    private void SpliceMap(String messageJson) {
         HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
             @Override
             public void MapDateFinish(final MapdataEntity supperMapData) {
                 Toast.makeText(SocetTestActivity.this, "完成拼接", Toast.LENGTH_SHORT).show();
                 Log.e("linfd","完成拼接");
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
-//                            @Override
-//                            public void getMap(final Bitmap map) {
-//                                SocetTestActivity.this.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        iv_map.setImageBitmap(map);
-//                                        Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
-//                                        Log.e("linfd", "完成拼接");
-//                                    }
-//                                });
-//
-//                            }
-//                        });
-//                    }
-//                }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+                            @Override
+                            public void getMap(final Bitmap map) {
+                                SocetTestActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv_map.setImageBitmap(map);
+                                        Toast.makeText(SocetTestActivity.this, "显示", Toast.LENGTH_SHORT).show();
+                                        Log.e("linfd", "完成拼接2");
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                }).start();
             }
-        }).handerMap(tcpMsg);
+        }).handerMap(messageJson);
     }
 
-    private void handerEntity(TypeEntity typeEntity, TcpMsg tcpMsg) {
+    private void handerEntity(TypeEntity typeEntity, String messageJson) {
+        if(TextUtils.isEmpty(typeEntity.getType())) {
+            return;
+        }
         switch (typeEntity.getType()) {
             case Contanst.GET_STATUS:
                 //SatusEntity satusEntity = GsonUtil.GsonToBean(tcpMsg.getSourceDataString(), SatusEntity.class);
@@ -199,8 +175,7 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
                 break;
             case Contanst.GET_MAP_PARAM:
                 Toast.makeText(this, "地图包信息", Toast.LENGTH_SHORT).show();
-                String[] source =  tcpMsg.getSourceDataString().split("\n");
-                MapParamEntity mapParamEntity = GsonUtil.GsonToBean(source[1],MapParamEntity.class);
+                MapParamEntity mapParamEntity = GsonUtil.GsonToBean(messageJson,MapParamEntity.class);
                 Contanst.MAPPARAMENTITY = mapParamEntity;
 
                 Log.e("linfd","地图包信息");
@@ -208,7 +183,8 @@ public class SocetTestActivity extends AppCompatActivity implements TcpClientLis
             case Contanst.MAP_DATA:
                 Toast.makeText(this, "地图数据", Toast.LENGTH_SHORT).show();
                 Log.e("linfd","地图数据");
-                SpliceMap(tcpMsg);
+                SpliceMap(messageJson);
+               // SpliceMap(tcpMsg);
                 break;
             case Contanst.SCAN:
                 Toast.makeText(this, "激光", Toast.LENGTH_SHORT).show();
