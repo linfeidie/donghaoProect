@@ -28,4 +28,6 @@ public class CommnetViewPager extends ViewPager {
         getParent().requestDisallowInterceptTouchEvent(true);
         return super.onInterceptTouchEvent(ev);
     }
+
+
 }
