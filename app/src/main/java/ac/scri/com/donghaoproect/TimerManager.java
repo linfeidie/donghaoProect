@@ -21,11 +21,11 @@ public class TimerManager {
     }
 
     public void startLoop(){
-        mHandler.postDelayed(r, 500);
+        mHandler.postDelayed(r, Contanst.ORDER_INTERVAL);
     }
     public void start(Runnable r){
         this.r = r;
-        mHandler.postDelayed(r, 500);
+        mHandler.postDelayed(r, Contanst.ORDER_INTERVAL);
     }
 
     public void removeMessage(){

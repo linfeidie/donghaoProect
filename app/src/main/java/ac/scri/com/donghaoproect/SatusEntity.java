@@ -25,21 +25,21 @@ public class SatusEntity {
      * work_mode :
      */
 
-    private int angular_speed;
+    private double angular_speed;
     private double axis_x;
     private double axis_y;
     private int axis_z;
     private int battery_percent;
     private int battery_volt;
     private int from_id;
-    private int linear_speed;
+    private double linear_speed;
     private RobotStateEntity robot_state;
     private double robot_yaw;
     private int to_id;
     private String type;
     private String work_mode;
 
-    public int getAngular_speed() {
+    public double getAngular_speed() {
         return angular_speed;
     }
 
@@ -95,7 +95,7 @@ public class SatusEntity {
         this.from_id = from_id;
     }
 
-    public int getLinear_speed() {
+    public double getLinear_speed() {
         return linear_speed;
     }
 

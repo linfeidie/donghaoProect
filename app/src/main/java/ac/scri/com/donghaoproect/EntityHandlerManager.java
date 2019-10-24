@@ -57,7 +57,7 @@ public class EntityHandlerManager {
                 break;
             case Contanst.SCAN:
                // Tools.showToast("激光");
-                Log.e("linfd","激光");
+                //Log.e("linfd","激光");
                 break;
             case Contanst.SERVER_ACK:
                 Log.e("linfd","服务器返回");

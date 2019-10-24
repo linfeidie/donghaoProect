@@ -81,7 +81,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         setContentView(R.layout.activity_cehua);
         DataChanger.getInstance().addObserver(watcher);
         initView();
-
+        ip_address.setIpAddress("192.168.1.102");
     }
 
 
@@ -121,7 +121,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         @Override
                         public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
                             super.onDisconnected(xTcpClient, s, e);
-                            switch_button.setChecked(false);
+                            //switch_button.setChecked(false);
                         }
                     });
                     ControlSendManager.connect();
@@ -138,18 +138,27 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
             @Override
             public void clickTopUp() {
-                Tools.showToast("view clickTop");
+                //Tools.showToast("view clickTop");
+                TimerManager.getInstance().removeMessage();
             }
 
             @Override
             public void clickTopDown() {
-
+                TimerManager.getInstance().start(new LooperRunnable() {
+                    @Override
+                    public void call() {
+                         Log.e("linfd","前");
+                        ControlSendManager.forward();
+                    }
+                });
             }
 
             @Override
             public void clickRightUp() {
                 //Tools.showToast("view clickRight");
+                Log.e("linfd","右消");
                 TimerManager.getInstance().removeMessage();
+
             }
 
             @Override
@@ -158,34 +167,51 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 TimerManager.getInstance().start(new LooperRunnable() {
                     @Override
                     public void call() {
-                        Log.e("linfd","11111121");
+                        Log.e("linfd","右");
+                        ControlSendManager.rightward();
                     }
                 });
             }
 
             @Override
             public void clickLeftUp() {
-                //  showToast("view clickLeft");
+                Log.e("linfd","左消");
+                TimerManager.getInstance().removeMessage();
             }
 
             @Override
             public void clickLeftDown() {
-
+                TimerManager.getInstance().start(new LooperRunnable() {
+                    @Override
+                    public void call() {
+                         Log.e("linfd","左");
+                        ControlSendManager.leftward();
+                    }
+                });
             }
 
             @Override
             public void clickCenter() {
+                ControlSendManager.stop();
                 //   showToast("view clickCenter");
             }
 
             @Override
             public void clickBottomUp() {
+                Log.e("linfd","后消");
+                TimerManager.getInstance().removeMessage();
                 //  showToast("view clickBottom");
             }
 
             @Override
             public void clickBottomDown() {
-
+                TimerManager.getInstance().start(new LooperRunnable() {
+                    @Override
+                    public void call() {
+                         Log.e("linfd","后");
+                        ControlSendManager.backward();
+                    }
+                });
             }
         });
         pages = new ArrayList<Fragment>();

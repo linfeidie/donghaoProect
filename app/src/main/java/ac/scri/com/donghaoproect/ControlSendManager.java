@@ -133,8 +133,8 @@ public class ControlSendManager {
     public static void set_speed(double linear_speed,double angular_speed){
         if (xTcpClient != null) {
             OrderEntitySetSpeed entity = new OrderEntitySetSpeed(id,1,"set_speed");
-            entity.angular_speed = linear_speed;
-            entity.linear_speed = angular_speed;
+            entity.linear_speed = linear_speed;
+            entity.angular_speed = angular_speed;
             entity.timeout = 10;
             entity.stop = false;
             String s = GsonUtil.GsonString(entity)+ "\n";
@@ -144,6 +144,26 @@ public class ControlSendManager {
         }
     }
 
+    // 向前走
+    public static void forward(){
+        set_speed(0.3,0);
+    }
+
+    public static void backward(){
+        set_speed(-0.3,0);
+    }
+
+    public static void leftward(){
+        set_speed(0,0.3);
+    }
+
+    public static void rightward(){
+        set_speed(0,-0.3);
+    }
+
+    public static void stop(){
+        set_speed(0,0);
+    }
     public static void send_order(int to_id,String order){
         if (xTcpClient != null) {
             OrderEntity entity = new OrderEntity(id,to_id,order);
