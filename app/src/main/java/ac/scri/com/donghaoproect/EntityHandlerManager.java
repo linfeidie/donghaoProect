@@ -21,13 +21,16 @@ public class EntityHandlerManager {
         switch (typeEntity.getType()) {
 
             case Contanst.GET_STATUS:
-                try {
-                    SatusEntity satusEntity = GsonUtil.GsonToBean(messageJson, SatusEntity.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("linfd",e.getMessage());
-                }
-                Tools.showToast("状态");
+//                try {
+//                    SatusEntity satusEntity = GsonUtil.GsonToBean(messageJson, SatusEntity.class);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.e("linfd",e.getMessage());
+//                }
+//                Tools.showToast("状态");
+                dataEntity.setType(typeEntity.getType());
+                dataEntity.message = messageJson ;
+                DataChanger.getInstance().postData(dataEntity);
                 break;
             case Contanst.GET_MAP:
                 //Toast.makeText(this, "地图", Toast.LENGTH_SHORT).show();

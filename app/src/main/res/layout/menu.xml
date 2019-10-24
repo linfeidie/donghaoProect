@@ -23,36 +23,70 @@
           android:layout_height="match_parent"
           android:orientation="vertical">
           <TextView
-              android:layout_width="match_parent"
-              android:text="工作模式"
-              android:layout_height="match_parent" />
-          <TextView
-              android:layout_width="match_parent"
-              android:text="电量"
-              android:layout_height="match_parent" />
-          <TextView
-              android:layout_width="match_parent"
-              android:text="电压"
-              android:layout_height="match_parent" />
-          <TextView
-              android:layout_width="match_parent"
-              android:text="线速度"
-              android:layout_height="match_parent" />
-          <TextView
-              android:layout_width="match_parent"
-              android:text="角速度"
-              android:layout_height="match_parent" />
-          <TextView
-              android:layout_width="match_parent"
-              android:text="充电状态"
-              android:layout_height="match_parent" />
-          <TextView
+              android:id="@+id/tv_car_num"
               android:layout_width="match_parent"
               android:text="小车编号"
               android:layout_height="match_parent" />
           <TextView
+              android:id="@+id/tv_work_mode"
               android:layout_width="match_parent"
-              android:text="222"
+              android:text="工作模式"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_battery_percent"
+              android:layout_width="match_parent"
+              android:text="电量"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_battery_volt"
+              android:layout_width="match_parent"
+              android:text="电压"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_linear_speed"
+              android:layout_width="match_parent"
+              android:text="线速度"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_angular_speed"
+              android:layout_width="match_parent"
+              android:text="角速度"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_charging_state"
+              android:layout_width="match_parent"
+              android:text="充电状态"
+              android:layout_height="match_parent" />
+
+          <TextView
+              android:id="@+id/tv_driver_fail"
+              android:layout_width="match_parent"
+              android:text="驱动"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_motor_overload"
+              android:layout_width="match_parent"
+              android:text="电机过载"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_slam_exception"
+              android:layout_width="match_parent"
+              android:text="slam异常"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_emergency_stop"
+              android:layout_width="match_parent"
+              android:text="急停"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_goal_reach"
+              android:layout_width="match_parent"
+              android:text="到达目标"
+              android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/tv_lidar_exception"
+              android:layout_width="match_parent"
+              android:text="雷达异常"
               android:layout_height="match_parent" />
       </LinearLayout>
   </ScrollView>
