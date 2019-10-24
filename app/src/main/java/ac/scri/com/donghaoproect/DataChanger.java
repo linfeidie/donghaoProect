@@ -26,8 +26,8 @@ public class DataChanger extends Observable {
     private DataChanger() {
     }
 
-    public void postData(Object object){
+    public void postData(DataEntity dataEntity){
         setChanged();
-        notifyObservers();
+        notifyObservers(dataEntity);
     }
 }

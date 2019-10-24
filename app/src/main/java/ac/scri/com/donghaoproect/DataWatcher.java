@@ -18,5 +18,5 @@ public abstract class DataWatcher implements Observer {
             notifyUpdata(o);
         }
     }
-    public abstract void notifyUpdata(Object data) ;
+    public abstract void notifyUpdata( Object o) ;
 }

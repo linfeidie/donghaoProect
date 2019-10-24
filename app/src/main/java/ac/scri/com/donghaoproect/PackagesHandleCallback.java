@@ -17,6 +17,7 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
     private StringBuffer incompleteJson = new StringBuffer();
     @Override
     public void onConnected(XTcpClient xTcpClient) {
+        Tools.showToast(xTcpClient.getTargetInfo().getIp() + "连接成功");
         ControlSendManager.set_online();
         ControlSendManager.set_connet();
     }
@@ -28,7 +29,7 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
 
     @Override
     public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
-
+        Tools.showToast("断开连接");
     }
 
     @Override

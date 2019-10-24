@@ -21,4 +21,14 @@ public class Tools {
         }
         mToast.show();
     }
+
+    public static void runOnUiThread(Runnable runnable) {
+        // 在主线程运行
+        if(android.os.Process.myTid()==DonghaoApplication.getMainTid()){
+            runnable.run();
+        }else{
+            //获取handler
+            DonghaoApplication.getHandler().post(runnable);
+        }
+    }
 }

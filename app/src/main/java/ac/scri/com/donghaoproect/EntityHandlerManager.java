@@ -1,5 +1,6 @@
 package ac.scri.com.donghaoproect;
 
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,10 +17,16 @@ public class EntityHandlerManager {
         if(TextUtils.isEmpty(typeEntity.getType())) {
             return;
         }
+        DataEntity dataEntity = new DataEntity();
         switch (typeEntity.getType()) {
 
             case Contanst.GET_STATUS:
-                SatusEntity satusEntity = GsonUtil.GsonToBean(messageJson, SatusEntity.class);
+                try {
+                    SatusEntity satusEntity = GsonUtil.GsonToBean(messageJson, SatusEntity.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("linfd",e.getMessage());
+                }
                 Tools.showToast("状态");
                 break;
             case Contanst.GET_MAP:
@@ -39,9 +46,11 @@ public class EntityHandlerManager {
                 Log.e("linfd","地图包信息");
                 break;
             case Contanst.MAP_DATA:
-                Tools.showToast("地图数据");
-                Log.e("linfd","地图数据");
-              //  SpliceMap(messageJson);
+                dataEntity.setType(typeEntity.getType());
+                dataEntity.message = messageJson ;
+                DataChanger.getInstance().postData(dataEntity);
+               // SpliceMap(messageJson);
+
                 break;
             case Contanst.SCAN:
                 Tools.showToast("激光");
@@ -52,4 +61,33 @@ public class EntityHandlerManager {
                 break;
         }
     }
+    private static void SpliceMap(String messageJson) {
+        HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
+            @Override
+            public void MapDateFinish(final MapdataEntity supperMapData) {
+                Tools.showToast("完成拼接");
+                Log.e("linfd","完成拼接");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+                            @Override
+                            public void getMap(final Bitmap map) {
+                               Tools.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                       // iv_map.setImageBitmap(map);
+                                        Tools.showToast("显示");
+                                        Log.e("linfd", "完成拼接2");
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                }).start();
+            }
+        }).handerMap(messageJson);
+    }
+
 }

@@ -31,7 +31,7 @@ public class ControlSendManager {
             //addMsg("粘包参数设置错误");
             return;
         }
-        String temp = "192.168.1.100:7665";//tcpclientEditIp.getText().toString().trim();
+        String temp = "192.168.1.101:7665";//tcpclientEditIp.getText().toString().trim();
         String[] temp2 = temp.split(":");
         if (temp2.length == 2 && StringValidationUtils.validateRegex(temp2[0], StringValidationUtils.RegexIP)
                 && StringValidationUtils.validateRegex(temp2[1], StringValidationUtils.RegexPort)) {

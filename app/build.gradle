@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.github.Blankeer:XAndroidSocket:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     compile 'com.github.bestTao:CoordinatorMenu:v1.0.2'
+    compile 'com.github.zcweng:switch-button:0.0.3@aar'
 }

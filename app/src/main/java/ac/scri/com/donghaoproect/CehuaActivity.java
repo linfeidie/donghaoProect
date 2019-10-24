@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.qiantao.coordinatormenu.CoordinatorMenu;
 
@@ -28,13 +27,24 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private CommnetViewPager viewpager = null;
     private RegionView mRegionView;
 
-    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cehua);
 
+        initView();
+        ControlSendManager.init(this, new PackagesHandleCallback() {
+            @Override
+            public void messageCallback(TypeEntity typeEntity, String message) {
+                EntityHandlerManager.handerEntity(typeEntity, message);
+
+            }
+        });
+        ControlSendManager.connect();
+    }
+
+    private void initView() {
         mRegionView = (RegionView) findViewById(R.id.regionView);
 
         mRegionView.setListener(new RegionView.RegionViewClickListener() {
