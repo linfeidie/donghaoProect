@@ -10,8 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="#9ED5E4"/>
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <ac.scri.com.donghaoproect.IPEditText
-        android:id="@+id/ipAddressFrom"
+        android:id="@+id/ip_address"
         android:layout_width="280dp"
         android:layout_height="100dp"
       />

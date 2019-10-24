@@ -29,12 +29,12 @@ public class SocetTestActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket);
-        ControlSendManager.init(this, new PackagesHandleCallback() {
-            @Override
-            public void messageCallback(TypeEntity typeEntity, String message) {
-                EntityHandlerManager.handerEntity(typeEntity, message);
-            }
-        });
+//        ControlSendManager.init(this, new PackagesHandleCallback() {
+//            @Override
+//            public void messageCallback(TypeEntity typeEntity, String message) {
+//                EntityHandlerManager.handerEntity(typeEntity, message);
+//            }
+//        });
         ControlSendManager.connect();
         // startGetGSP();
         bt_rotate = findViewById(R.id.bt_rotate);

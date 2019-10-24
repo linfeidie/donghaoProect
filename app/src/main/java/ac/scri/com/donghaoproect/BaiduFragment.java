@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * 文件描述：.
@@ -19,29 +17,17 @@ import android.widget.TextView;
  */
 public class BaiduFragment extends Fragment {
 
-    private DataWatcher watcher=new DataWatcher() {
-        @Override
-        public void notifyUpdata(Object data) {
-            if(data instanceof DataEntity) {
-                DataEntity dataEntity = (DataEntity)data;
-                if(dataEntity.getType().equalsIgnoreCase(Contanst.MAP_DATA)) {
-                    Tools.showToast("地图数据");
-                    Log.e("linfd","地图数据");
-                }
-            }
-        }
-    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataChanger.getInstance().addObserver(watcher);
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView textView = new TextView(container.getContext());
-        textView.setText("我是百度地图");
-        return textView;
+       View rootView = inflater.inflate(R.layout.fragment_baidu,container,false);
+        return rootView;
     }
 }

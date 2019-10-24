@@ -242,6 +242,21 @@ public class RegionView extends View {
                                 mListener.clickRightDown();
                             }
                             break;
+                        case BOTTOM:
+                            if (mListener != null) {
+                                mListener.clickBottomDown();
+                            }
+                            break;
+                        case TOP:
+                            if (mListener != null) {
+                                mListener.clickTopDown();
+                            }
+                            break;
+                        case LEFT:
+                            if (mListener != null) {
+                                mListener.clickLeftDown();
+                            }
+                            break;
                     }
                 }
 
@@ -257,22 +272,22 @@ public class RegionView extends View {
                     switch (mClickFlag) {
                         case RIGHT:
                             if (mListener != null) {
-                                mListener.clickRight();
+                                mListener.clickRightUp();
                             }
                             break;
                         case BOTTOM:
                             if (mListener != null) {
-                                mListener.clickBottom();
+                                mListener.clickBottomUp();
                             }
                             break;
                         case LEFT:
                             if (mListener != null) {
-                                mListener.clickLeft();
+                                mListener.clickLeftUp();
                             }
                             break;
                         case TOP:
                             if (mListener != null) {
-                                mListener.clickTop();
+                                mListener.clickTopUp();
                             }
                             break;
                         case CENTER:
@@ -335,28 +350,32 @@ public class RegionView extends View {
         /**
          * 左边按钮被点击了
          */
-        public void clickLeft();
+         void clickLeftUp();
+         void clickLeftDown();
+
 
         /**
          * 上边按钮被点击了
          */
-        public void clickTop();
-
+         void clickTopUp();
+         void clickTopDown();
         /**
          * 右边按钮被点击了
          */
-        public void clickRight();
-        public void clickRightDown();
+         void clickRightUp();
+         void clickRightDown();
 
         /**
          * 下边按钮被点击了
          */
-        public void clickBottom();
+         void clickBottomUp();
+         void clickBottomDown();
 
         /**
          * 中间按钮被点击了
          */
-        public void clickCenter();
+         void clickCenter();
     }
+
 
 }

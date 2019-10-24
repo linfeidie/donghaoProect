@@ -11,6 +11,8 @@ public class Contanst {
 
     public static  MapParamEntity MAPPARAMENTITY = null;
 
+    public static final String PORT = "7665"; //服务器端口
+
     public static final String GET_STATUS = "robot_status";
 
     public static final String GET_MAP = "map";

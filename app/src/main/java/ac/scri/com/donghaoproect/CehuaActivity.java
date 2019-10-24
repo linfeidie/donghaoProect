@@ -10,7 +10,9 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blanke.xsocket.tcp.client.XTcpClient;
 import com.qiantao.coordinatormenu.CoordinatorMenu;
+import com.suke.widget.SwitchButton;
 
 import java.util.ArrayList;
 
@@ -31,6 +33,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private RegionView mRegionView;
     private TextView tv_work_mode,tv_car_num,tv_battery_percent,tv_battery_volt,tv_linear_speed,tv_angular_speed,tv_charging_state,tv_driver_fail,tv_motor_overload,tv_slam_exception,
             tv_emergency_stop,tv_goal_reach,tv_lidar_exception;
+    private IPEditText ip_address;
+    private SwitchButton switch_button;
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -77,14 +81,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         setContentView(R.layout.activity_cehua);
         DataChanger.getInstance().addObserver(watcher);
         initView();
-        ControlSendManager.init(this, new PackagesHandleCallback() {
-            @Override
-            public void messageCallback(TypeEntity typeEntity, String message) {
-                EntityHandlerManager.handerEntity(typeEntity, message);
 
-            }
-        });
-        ControlSendManager.connect();
     }
 
 
@@ -102,36 +99,78 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         tv_emergency_stop = findViewById(R.id.tv_emergency_stop);
         tv_goal_reach = findViewById(R.id.tv_goal_reach);
         tv_lidar_exception = findViewById(R.id.tv_lidar_exception);
+        ip_address = findViewById(R.id.ip_address);
+        switch_button = findViewById(R.id.switch_button);
 //        tv_work_mode = findViewById(R.id.tv_work_mode);
-//        tv_work_mode = findViewById(R.id.tv_work_mode);
-//        tv_work_mode = findViewById(R.id.tv_work_mode);
+
+        switch_button.setChecked(false);
 
 
+        switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
 
+                if(isChecked) {
+                    ControlSendManager.init(CehuaActivity.this,ip_address.getIpAddress(), new PackagesHandleCallback() {
+                        @Override
+                        public void messageCallback(TypeEntity typeEntity, String message) {
+                            EntityHandlerManager.handerEntity(typeEntity, message);
 
+                        }
+
+                        @Override
+                        public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
+                            super.onDisconnected(xTcpClient, s, e);
+                            switch_button.setChecked(false);
+                        }
+                    });
+                    ControlSendManager.connect();
+                }else {
+                    ControlSendManager.disconnect();
+                }
+
+            }
+        });
 
         mRegionView = (RegionView) findViewById(R.id.regionView);
 
         mRegionView.setListener(new RegionView.RegionViewClickListener() {
 
             @Override
-            public void clickTop() {
-                // showToast("view clickTop");
+            public void clickTopUp() {
+                Tools.showToast("view clickTop");
             }
 
             @Override
-            public void clickRight() {
-                //  showToast("view clickRight");
+            public void clickTopDown() {
+
+            }
+
+            @Override
+            public void clickRightUp() {
+                //Tools.showToast("view clickRight");
+                TimerManager.getInstance().removeMessage();
             }
 
             @Override
             public void clickRightDown() {
-                //showToast("view clickRightwdown");
+                //Tools.showToast("view clickRightwdown");
+                TimerManager.getInstance().start(new LooperRunnable() {
+                    @Override
+                    public void call() {
+                        Log.e("linfd","11111121");
+                    }
+                });
             }
 
             @Override
-            public void clickLeft() {
+            public void clickLeftUp() {
                 //  showToast("view clickLeft");
+            }
+
+            @Override
+            public void clickLeftDown() {
+
             }
 
             @Override
@@ -140,8 +179,13 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             }
 
             @Override
-            public void clickBottom() {
+            public void clickBottomUp() {
                 //  showToast("view clickBottom");
+            }
+
+            @Override
+            public void clickBottomDown() {
+
             }
         });
         pages = new ArrayList<Fragment>();

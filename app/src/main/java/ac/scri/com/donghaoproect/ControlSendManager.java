@@ -1,6 +1,7 @@
 package ac.scri.com.donghaoproect;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.blanke.xsocket.tcp.client.TcpConnConfig;
@@ -23,7 +24,7 @@ public class ControlSendManager {
     private static Context mContext;
     private static int id = -9;
 
-    public static void  init(Context context, TcpClientListener listener){
+    public static void  init(Context context,String ipAddress, TcpClientListener listener){
         mContext = context;
         AbsStickPackageHelper stickHelper = new BaseStickPackageHelper(8000);//tcpclientStaticpackagelayout.getStickPackageHelper();
         if (stickHelper == null) {
@@ -31,11 +32,14 @@ public class ControlSendManager {
             //addMsg("粘包参数设置错误");
             return;
         }
-        String temp = "192.168.1.101:7665";//tcpclientEditIp.getText().toString().trim();
-        String[] temp2 = temp.split(":");
-        if (temp2.length == 2 && StringValidationUtils.validateRegex(temp2[0], StringValidationUtils.RegexIP)
-                && StringValidationUtils.validateRegex(temp2[1], StringValidationUtils.RegexPort)) {
-            TargetInfo targetInfo = new TargetInfo(temp2[0], Integer.parseInt(temp2[1]));
+        if(TextUtils.isEmpty(ipAddress)) {
+            Tools.showToast("请输入完整的IP地址");
+        }
+       // String temp = "192.168.1.101:7665";//tcpclientEditIp.getText().toString().trim();
+
+        if ( StringValidationUtils.validateRegex(ipAddress, StringValidationUtils.RegexIP)
+                && StringValidationUtils.validateRegex(Contanst.PORT, StringValidationUtils.RegexPort)) {
+            TargetInfo targetInfo = new TargetInfo(ipAddress, Integer.parseInt(Contanst.PORT));
             xTcpClient = XTcpClient.getTcpClient(targetInfo);
             xTcpClient.addTcpClientListener(listener);
             xTcpClient.config(new TcpConnConfig.Builder()
@@ -50,25 +54,18 @@ public class ControlSendManager {
     }
 
     public static void connect() {
-        if(xTcpClient != null && xTcpClient.isConnected()) {
+        if(xTcpClient == null) {
+            return;
+        }
+        if(xTcpClient.isConnected()) {
             Toast.makeText(mContext,"已经连接",Toast.LENGTH_SHORT).show();
             return;
         }
-        String temp = "192.168.1.100:7665";//tcpclientEditIp.getText().toString().trim();
-        String[] temp2 = temp.split(":");
-        if (temp2.length == 2 && StringValidationUtils.validateRegex(temp2[0], StringValidationUtils.RegexIP)
-                && StringValidationUtils.validateRegex(temp2[1], StringValidationUtils.RegexPort)) {
-            TargetInfo targetInfo = new TargetInfo(temp2[0], Integer.parseInt(temp2[1]));
-
-            if (xTcpClient.isDisconnected()) {
-                xTcpClient.connect();
-            } else {
-                Toast.makeText(mContext, "已经存在该连接", Toast.LENGTH_SHORT).show();
-                //addMsg("已经存在该连接");
-            }
+        if (xTcpClient.isDisconnected()) {
+            xTcpClient.connect();
         } else {
-            Toast.makeText(mContext, "服务器地址必须是", Toast.LENGTH_SHORT).show();
-            //addMsg("服务器地址必须是 ip:port 形式");
+            Toast.makeText(mContext, "已经存在该连接", Toast.LENGTH_SHORT).show();
+            //addMsg("已经存在该连接");
         }
 
     }
