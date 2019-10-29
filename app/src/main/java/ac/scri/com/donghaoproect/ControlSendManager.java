@@ -10,6 +10,7 @@ import com.blanke.xsocket.tcp.client.bean.TargetInfo;
 import com.blanke.xsocket.tcp.client.helper.stickpackage.AbsStickPackageHelper;
 import com.blanke.xsocket.tcp.client.helper.stickpackage.BaseStickPackageHelper;
 import com.blanke.xsocket.tcp.client.listener.TcpClientListener;
+import com.blanke.xsocket.tcp.client.manager.TcpClientManager;
 import com.blanke.xsocket.utils.StringValidationUtils;
 
 /**
@@ -21,10 +22,11 @@ import com.blanke.xsocket.utils.StringValidationUtils;
  */
 public class ControlSendManager {
     private static XTcpClient xTcpClient;
-    private static Context mContext;
+    private static Context mContext = DonghaoApplication.getApplication();
     private static int id = -9;
 
     public static void  init(Context context,String ipAddress, TcpClientListener listener){
+        TcpClientManager.sMXTcpClients.clear();
         mContext = context;
         AbsStickPackageHelper stickHelper = new BaseStickPackageHelper(8000);//tcpclientStaticpackagelayout.getStickPackageHelper();
         if (stickHelper == null) {

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,13 +66,13 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         tv_battery_volt.setText("电压:"+satusEntity.getBattery_volt()+"V");
         tv_linear_speed.setText("线速度:"+satusEntity.getLinear_speed()+"m/s");
         tv_angular_speed.setText("角速度:"+satusEntity.getAngular_speed()+"rad/s");
-        tv_charging_state.setText("充电状态:"+satusEntity.getRobot_state().isCharging_state()+"");
-        tv_driver_fail.setText("驱动异常:"+satusEntity.getRobot_state().isDriver_fail()+"");
-        tv_motor_overload.setText("电机过载:"+satusEntity.getRobot_state().isMotor_overload()+"");
-        tv_slam_exception.setText("slam异常："+satusEntity.getRobot_state().isSlam_exception()+"");
-        tv_emergency_stop.setText("急停:"+satusEntity.getRobot_state().isEmergency_stop()+"");
-        tv_goal_reach.setText("达到目的地:"+satusEntity.getRobot_state().isGoal_reach()+"");
-        tv_lidar_exception.setText("雷达异常:"+satusEntity.getRobot_state().isLidar_exception()+"");
+        tv_charging_state.setText("充电状态:"+(satusEntity.getRobot_state().isCharging_state()?"是":"否"));
+        tv_driver_fail.setText("驱动异常:"+(satusEntity.getRobot_state().isDriver_fail()?"是":"否"));
+        tv_motor_overload.setText("电机过载:"+(satusEntity.getRobot_state().isMotor_overload()?"是":"否"));
+        tv_slam_exception.setText("slam异常："+(satusEntity.getRobot_state().isSlam_exception()?"是":"否"));
+        tv_emergency_stop.setText("急停:"+(satusEntity.getRobot_state().isEmergency_stop()?"是":"否"));
+        tv_goal_reach.setText("达到目的地:"+(satusEntity.getRobot_state().isGoal_reach()?"是":"否"));
+        tv_lidar_exception.setText("雷达异常:"+(satusEntity.getRobot_state().isLidar_exception()?"是":"否"));
 
     }
 
@@ -79,6 +80,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cehua);
+        getSupportActionBar().hide();
         DataChanger.getInstance().addObserver(watcher);
         initView();
         ip_address.setIpAddress("192.168.1.102");
@@ -114,7 +116,12 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     ControlSendManager.init(CehuaActivity.this,ip_address.getIpAddress(), new PackagesHandleCallback() {
                         @Override
                         public void messageCallback(TypeEntity typeEntity, String message) {
-                            EntityHandlerManager.handerEntity(typeEntity, message);
+                            EntityHandlerManager.handerEntity(typeEntity, message, new EntityHandlerManager.HandlerCallback() {
+                                @Override
+                                public void callback(boolean b) {
+                                    switch_button.setChecked(b);
+                                }
+                            });
 
                         }
 
@@ -282,5 +289,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }
     }
 
-
+    public void tv(View view ){
+        ControlSendManager.connect();
+    }
 }

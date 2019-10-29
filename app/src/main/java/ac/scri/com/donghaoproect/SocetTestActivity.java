@@ -23,7 +23,6 @@ public class SocetTestActivity extends AppCompatActivity  {
     public static final String TAG = SocetTestActivity.class.getSimpleName();
     private Button bt_rotate;
     private ImageView iv_map;
-    private StringBuffer incompleteJson = new StringBuffer();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

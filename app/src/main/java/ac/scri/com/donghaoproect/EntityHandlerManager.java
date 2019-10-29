@@ -1,6 +1,5 @@
 package ac.scri.com.donghaoproect;
 
-import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,7 +12,14 @@ import android.util.Log;
  */
 public class EntityHandlerManager {
 
+    HandlerCallback mHandlerCallback;
+
     public static void handerEntity(TypeEntity typeEntity, String messageJson) {
+
+        handerEntity(typeEntity,messageJson,null);
+    }
+
+    public static void handerEntity(TypeEntity typeEntity, String messageJson,HandlerCallback mHandlerCallback) {
         if(TextUtils.isEmpty(typeEntity.getType())) {
             return;
         }
@@ -60,38 +66,17 @@ public class EntityHandlerManager {
                 //Log.e("linfd","激光");
                 break;
             case Contanst.SERVER_ACK:
-                Log.e("linfd","服务器返回");
                 Tools.showToast("服务器返回");
+                ServerInfo serverInfo = GsonUtil.GsonToBean(messageJson, ServerInfo.class);
+                if(mHandlerCallback != null) {
+                    mHandlerCallback.callback(serverInfo.getState().equalsIgnoreCase("online"));
+                }
                 break;
         }
     }
-    private static void SpliceMap(String messageJson) {
-        HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
-            @Override
-            public void MapDateFinish(final MapdataEntity supperMapData) {
-                Tools.showToast("完成拼接");
-                Log.e("linfd","完成拼接");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
-                            @Override
-                            public void getMap(final Bitmap map) {
-                               Tools.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                       // iv_map.setImageBitmap(map);
-                                        Tools.showToast("显示");
-                                        Log.e("linfd", "完成拼接2");
-                                    }
-                                });
 
-                            }
-                        });
-                    }
-                }).start();
-            }
-        }).handerMap(messageJson);
+    interface HandlerCallback{
+        void callback(boolean b);
     }
 
 }

@@ -68,7 +68,15 @@ public class ObtainMapManager {
                     color = Color.BLACK;
                 }
 
-                bitmap.setPixel(i, j, color);
+                try {
+                    bitmap.setPixel(j, i, color);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Tools.showToast("地图异常");
+                }
+//                if(i > 384) {
+//                   Tools.showToast("超过了");
+//                }
             }
         }
         if(bitmap != null && mapListenter != null) {

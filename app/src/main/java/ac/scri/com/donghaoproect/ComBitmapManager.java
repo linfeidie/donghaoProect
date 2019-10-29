@@ -39,7 +39,7 @@ class ComBitmapManager {
     //开始合成
     public void startComposite(Rect rect, CompositeMapListener listener){
         obtainBitmap();
-        mapComposite = toConformBitmap(rotateBitmap(mapBackground,180),mapLocation,rect);
+        mapComposite = toConformBitmap(rotateBitmap(mapBackground,90),mapLocation,rect);
         if(listener != null && mapComposite != null) {
             listener.compositeMapCallBack(mapComposite);
         }
@@ -58,15 +58,15 @@ class ComBitmapManager {
 
         int bgWidth = background.getWidth();
         int bgHeight = background.getHeight();
-        //int fgWidth = foreground.getWidth();
-        //int fgHeight = foreground.getHeight();
+        int fgWidth = foreground.getWidth();
+        int fgHeight = foreground.getHeight();
         //create the new blank bitmap 创建一个新的和SRC长度宽度一样的位图
         Bitmap newbmp = Bitmap.createBitmap(bgWidth, bgHeight, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(newbmp);
         //draw bg into
         cv.drawBitmap(background, 0, 0, null);//在 0，0坐标开始画入bg
         //draw fg into
-        cv.drawBitmap(foreground, rect.left, rect.top, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
+        cv.drawBitmap(foreground, rect.left-fgWidth/2, rect.top-fgHeight/2, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
         //save all clip
 //        cv.save(Canvas.ALL_SAVE_FLAG);//保存
 //        //store
@@ -82,6 +82,7 @@ class ComBitmapManager {
         int height = origin.getHeight();
         Matrix matrix = new Matrix();
         matrix.setRotate(alpha);
+        matrix.postScale(1,-1);
         // 围绕原地进行旋转
         Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
         if (newBM.equals(origin)) {

@@ -8,14 +8,13 @@
     <ac.scri.com.donghaoproect.CommnetViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="250dp"></ac.scri.com.donghaoproect.CommnetViewPager>
+        android:layout_height="300dp"></ac.scri.com.donghaoproect.CommnetViewPager>
 
     <ac.scri.com.donghaoproect.RegionView
         android:id="@+id/regionView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="260dp"
+        android:layout_below="@+id/viewpager"
+        android:layout_marginTop="10dp"
         android:visibility="visible" />
 </com.qiantao.coordinatormenu.MainView>

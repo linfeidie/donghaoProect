@@ -30,15 +30,59 @@ public class IndoorFragment extends Fragment {
                 if(dataEntity.getType().equalsIgnoreCase(Contanst.MAP_DATA)) {
                     Tools.showToast("地图数据");
                     Log.e("linfd","地图数据");
+                    SpliceMap(dataEntity.message);
+                }else if (dataEntity.getType().equalsIgnoreCase(Contanst.GET_STATUS)) {
+                    try {
+                        SatusEntity satusEntity = GsonUtil.GsonToBean(dataEntity.message, SatusEntity.class);
+                        updateLocation(satusEntity);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("linfd", e.getMessage());
+                    }
                 }
             }
         }
     };
 
+    private void updateLocation(final SatusEntity satusEntity) {
+        if(satusEntity == null || Contanst.MAPPARAMENTITY == null) {
+            return;
+        }
+        Tools.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Tools.showToast("显示");
+                Log.e("linfd", "完成拼接2");
+                if(Contanst.MAPPARAMENTITY == null) {
+                    return;
+                }
+//                double left = - (Contanst.MAPPARAMENTITY.getOrigin().getX() + satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution() ;
+//                double top = Contanst.MAPPARAMENTITY.getHeight() + (Contanst.MAPPARAMENTITY.getOrigin().getY() + satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution();
+
+                double left = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getY() - satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution());
+                double top = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getX() - satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution());
+
+//                double left = 1318;
+//                double top = 222;
+                Log.e("linfd",left+"==="+top);
+                Rect rect = new Rect((int)left,(int)top,0,0);
+                ComBitmapManager.getInstance().startComposite(rect, new ComBitmapManager.CompositeMapListener() {
+                    @Override
+                    public void compositeMapCallBack(Bitmap mapComposite) {
+                        iv_bitmap.setImageBitmap(mapComposite);
+                    }
+                });
+            }
+        });
+
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataChanger.getInstance().addObserver(watcher);
+
     }
 
     @Nullable
@@ -52,17 +96,49 @@ public class IndoorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         iv_bitmap = view.findViewById(R.id.iv_bitmap);
+//        Tools.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Tools.showToast("显示");
+//                Log.e("linfd", "完成拼接2");
+//                double left = 1318;
+//                double top = 222;
+//                Rect rect = new Rect((int)left,(int)top,0,0);
+//                ComBitmapManager.getInstance().startComposite(rect, new ComBitmapManager.CompositeMapListener() {
+//                    @Override
+//                    public void compositeMapCallBack(Bitmap mapComposite) {
+//                        iv_bitmap.setImageBitmap(mapComposite);
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Rect rect = new Rect(1264,220,0,0);
-        ComBitmapManager.getInstance().startComposite(rect, new ComBitmapManager.CompositeMapListener() {
+
+    }
+
+    private  void SpliceMap(String messageJson) {
+        HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
             @Override
-            public void compositeMapCallBack(Bitmap mapComposite) {
-                iv_bitmap.setImageBitmap(mapComposite);
+            public void MapDateFinish(final MapdataEntity supperMapData) {
+                Tools.showToast("完成拼接");
+                Log.e("linfd","完成拼接");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
+                            @Override
+                            public void getMap(final Bitmap map) {
+
+
+                            }
+                        });
+                    }
+                }).start();
             }
-        });
+        }).handerMap(messageJson);
     }
 }

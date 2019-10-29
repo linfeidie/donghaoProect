@@ -15,6 +15,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="111"
+        android:onClick="tv"/>
     <ac.scri.com.donghaoproect.IPEditText
         android:id="@+id/ip_address"
         android:layout_width="280dp"
