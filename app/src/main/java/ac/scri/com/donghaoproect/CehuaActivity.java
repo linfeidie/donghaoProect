@@ -119,7 +119,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                             EntityHandlerManager.handerEntity(typeEntity, message, new EntityHandlerManager.HandlerCallback() {
                                 @Override
                                 public void callback(boolean b) {
-                                    switch_button.setChecked(b);
+                                    //switch_button.setChecked(b);
                                 }
                             });
 
@@ -128,14 +128,30 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         @Override
                         public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
                             super.onDisconnected(xTcpClient, s, e);
-                            //switch_button.setChecked(false);
+//                            if(switch_button.isChecked()) {
+//                                switch_button.setChecked(false);
+//                            }
+
+                        }
+
+                        @Override
+                        public void onConnected(XTcpClient xTcpClient) {
+                            super.onConnected(xTcpClient);
+//                            if(!switch_button.isChecked()) {
+//                                switch_button.setChecked(true);
+//                            }
                         }
                     });
                     ControlSendManager.connect();
                 }else {
                     ControlSendManager.disconnect();
                 }
-
+//                if(switch_button.isChecked()) {
+//                    switch_button.setChecked(true);
+//                }else  {
+//                    switch_button.setChecked(false);
+//                }
+                ip_address.setVisibility(isChecked?View.GONE:View.VISIBLE);
             }
         });
 
@@ -174,7 +190,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 TimerManager.getInstance().start(new LooperRunnable() {
                     @Override
                     public void call() {
-                        Log.e("linfd","右");
+                        //Log.e("linfd","右");
                         ControlSendManager.rightward();
                     }
                 });

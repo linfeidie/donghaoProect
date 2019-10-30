@@ -30,7 +30,8 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
 
     @Override
     public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
-        Tools.showToast("断开连接");
+        Tools.showToast(s);
+
     }
 
     @Override

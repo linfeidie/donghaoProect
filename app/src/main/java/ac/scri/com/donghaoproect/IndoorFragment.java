@@ -52,22 +52,20 @@ public class IndoorFragment extends Fragment {
         Tools.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Tools.showToast("显示");
-                Log.e("linfd", "完成拼接2");
+                Tools.showToast(360*satusEntity.getRobot_yaw()/(2*Math.PI)+"");
+                //Log.e("linfd", "完成拼接2");
                 if(Contanst.MAPPARAMENTITY == null) {
                     return;
                 }
-//                double left = - (Contanst.MAPPARAMENTITY.getOrigin().getX() + satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution() ;
-//                double top = Contanst.MAPPARAMENTITY.getHeight() + (Contanst.MAPPARAMENTITY.getOrigin().getY() + satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution();
 
                 double left = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getY() - satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution());
                 double top = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getX() - satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution());
 
-//                double left = 1318;
-//                double top = 222;
-                Log.e("linfd",left+"==="+top);
+                Log.e("linfd",satusEntity.getAxis_x()+"==="+satusEntity.getAxis_y());
+               // Log.e("linfd",left+"==="+top);
+                float angle = (float) (360*satusEntity.getRobot_yaw()/(2*Math.PI));
                 Rect rect = new Rect((int)left,(int)top,0,0);
-                ComBitmapManager.getInstance().startComposite(rect, new ComBitmapManager.CompositeMapListener() {
+                ComBitmapManager.getInstance().startComposite(rect, angle,new ComBitmapManager.CompositeMapListener() {
                     @Override
                     public void compositeMapCallBack(Bitmap mapComposite) {
                         iv_bitmap.setImageBitmap(mapComposite);

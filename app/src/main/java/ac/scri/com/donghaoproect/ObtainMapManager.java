@@ -49,7 +49,7 @@ public class ObtainMapManager {
         //画点
         drawBitmap(mapListenter);
     }
-
+    //根据队列里存储的数据描点
     private void drawBitmap(MapListenter mapListenter) {
 
 

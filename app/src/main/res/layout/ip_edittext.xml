@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <EditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/ip_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

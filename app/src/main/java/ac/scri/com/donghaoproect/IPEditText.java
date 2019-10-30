@@ -1,6 +1,7 @@
 package ac.scri.com.donghaoproect;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -18,7 +19,7 @@ import android.widget.LinearLayout;
  */
 public class IPEditText extends LinearLayout {
 
-    private EditText mIP1;
+    private AppCompatEditText mIP1;
     private EditText mIP2;
     private EditText mIP3;
     private EditText mIP4;
@@ -31,7 +32,7 @@ public class IPEditText extends LinearLayout {
          * 初始化控件
          */
         LayoutInflater.from(context).inflate(R.layout.ip_edittext, this);
-        mIP1 = (EditText) findViewById(R.id.ip_1);
+        mIP1 = (AppCompatEditText) findViewById(R.id.ip_1);
         mIP2 = (EditText) findViewById(R.id.ip_2);
         mIP3 = (EditText) findViewById(R.id.ip_3);
         mIP4 = (EditText) findViewById(R.id.ip_4);

@@ -16,16 +16,17 @@ import java.io.File;
  * 版本号：Socket_learning
  */
 class ComBitmapManager {
-    private static volatile ComBitmapManager ourInstance ;
+    private static volatile ComBitmapManager ourInstance;
     private Bitmap mapBackground;
     private Bitmap mapLocation;
     private Bitmap mapComposite;
     private CompositeMapListener listener;
+    private Matrix matrix = null;
 
     static ComBitmapManager getInstance() {
-        if(ourInstance == null ) {
-            synchronized (ComBitmapManager.class){
-                if(ourInstance == null) {
+        if (ourInstance == null) {
+            synchronized (ComBitmapManager.class) {
+                if (ourInstance == null) {
                     ourInstance = new ComBitmapManager();
                 }
             }
@@ -34,25 +35,26 @@ class ComBitmapManager {
     }
 
     private ComBitmapManager() {
+        matrix = new Matrix();
     }
 
     //开始合成
-    public void startComposite(Rect rect, CompositeMapListener listener){
+    public void startComposite(Rect rect, float angle, CompositeMapListener listener) {
         obtainBitmap();
-        mapComposite = toConformBitmap(rotateBitmap(mapBackground,90),mapLocation,rect);
-        if(listener != null && mapComposite != null) {
+        mapComposite = toConformBitmap(rotateBitmap(mapBackground, 90), mapLocation, rect,angle);
+        if (listener != null && mapComposite != null) {
             listener.compositeMapCallBack(mapComposite);
         }
     }
 
     private void obtainBitmap() {
-        File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(),"11.png");
-        mapBackground=BitmapFactory.decodeFile(file.getAbsolutePath());
+        File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(), "11.png");
+        mapBackground = BitmapFactory.decodeFile(file.getAbsolutePath());
         mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.yuandian); // 间接调用
     }
 
-    private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect) {
-        if( background == null ) {
+    private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect,float angle) {
+        if (background == null) {
             return null;
         }
 
@@ -66,11 +68,11 @@ class ComBitmapManager {
         //draw bg into
         cv.drawBitmap(background, 0, 0, null);//在 0，0坐标开始画入bg
         //draw fg into
-        cv.drawBitmap(foreground, rect.left-fgWidth/2, rect.top-fgHeight/2, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
+        cv.drawBitmap(adjustPhotoRotation(foreground,angle), rect.left - fgWidth / 2, rect.top - fgHeight / 2, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
         //save all clip
 //        cv.save(Canvas.ALL_SAVE_FLAG);//保存
 //        //store
-//        cv.restore();//存储
+//        cv.restore();//存储adjustPhotoRotation(foreground,angle),
         return newbmp;
     }
 
@@ -82,7 +84,7 @@ class ComBitmapManager {
         int height = origin.getHeight();
         Matrix matrix = new Matrix();
         matrix.setRotate(alpha);
-        matrix.postScale(1,-1);
+        matrix.postScale(1, -1);
         // 围绕原地进行旋转
         Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
         if (newBM.equals(origin)) {
@@ -92,7 +94,24 @@ class ComBitmapManager {
         return newBM;
     }
 
-    public  interface CompositeMapListener{
-         void compositeMapCallBack(Bitmap mapComposite);
+    public interface CompositeMapListener {
+        void compositeMapCallBack(Bitmap mapComposite);
     }
+
+    private Bitmap adjustPhotoRotation(Bitmap bm, final float orientationDegree) {
+
+
+        matrix.setRotate(-orientationDegree, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+
+        try {
+            Bitmap bm1 = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+
+            return bm1;
+
+        } catch (OutOfMemoryError ex) {
+        }
+        return null;
+    }
+
+
 }
