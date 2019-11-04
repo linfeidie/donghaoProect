@@ -109,11 +109,13 @@ public class ControlSendManager {
     }
 
     //设置特定距离和角度
-    public static void set_distance(double dist,double turn){
+    public static void set_distance(double dist,double turn,double linear_speed,double angular_speed){
         if (xTcpClient != null) {
             OrderEntityDist entity = new OrderEntityDist(id,1,"set_distance");
             entity.setDist(dist);
             entity.setTurn(turn);
+            entity.setLinear_speed(linear_speed);
+            entity.setAngular_speed(angular_speed);
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {

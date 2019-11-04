@@ -17,4 +17,10 @@
         android:layout_below="@+id/viewpager"
         android:layout_marginTop="10dp"
         android:visibility="visible" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/regionView"
+        android:text="操作"
+        android:onClick="done"/>
 </com.qiantao.coordinatormenu.MainView>

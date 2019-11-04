@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,8 +15,14 @@ import android.widget.TextView;
 import com.blanke.xsocket.tcp.client.XTcpClient;
 import com.qiantao.coordinatormenu.CoordinatorMenu;
 import com.suke.widget.SwitchButton;
+import com.warkiz.widget.IndicatorSeekBar;
 
 import java.util.ArrayList;
+
+import ac.scri.com.donghaoproect.nicedialog.BaseNiceDialog;
+import ac.scri.com.donghaoproect.nicedialog.NiceDialog;
+import ac.scri.com.donghaoproect.nicedialog.ViewConvertListener;
+import ac.scri.com.donghaoproect.nicedialog.ViewHolder;
 
 /**
  * https://github.com/qiantao94/CoordinatorMenu
@@ -103,8 +110,6 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         tv_lidar_exception = findViewById(R.id.tv_lidar_exception);
         ip_address = findViewById(R.id.ip_address);
         switch_button = findViewById(R.id.switch_button);
-//        tv_work_mode = findViewById(R.id.tv_work_mode);
-
         switch_button.setChecked(false);
 
 
@@ -305,7 +310,39 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }
     }
 
-    public void tv(View view ){
-        ControlSendManager.connect();
+     IndicatorSeekBar sb_distance;
+    IndicatorSeekBar sb_angular;
+    public void done(View view ){
+        NiceDialog.init().setLayoutId(R.layout.dialog_panel).setConvertListener(new ViewConvertListener() {
+            @Override
+            public void convertView(ViewHolder holder, final BaseNiceDialog dialog) {
+                 sb_distance = holder.getView(R.id.sb_distance);
+                 sb_angular = holder.getView(R.id.sb_angular);
+                sb_distance.setOnSeekChangeListener(new OnSimpleSeekChangeListener(){
+                    @Override
+                    public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                        super.onStopTrackingTouch(seekBar);
+                        sb_distance = seekBar;
+                    }
+                });
+                sb_angular.setOnSeekChangeListener(new OnSimpleSeekChangeListener(){
+                    @Override
+                    public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+                        super.onStopTrackingTouch(seekBar);
+                        sb_angular = seekBar;
+                    }
+                });
+                holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
+                        sb_distance.setProgress(0);
+                        sb_angular.setProgress(0);
+                        dialog.dismiss();
+                    }
+
+                });
+            }
+        }).setWidth(0).setHeight(200).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
     }
 }

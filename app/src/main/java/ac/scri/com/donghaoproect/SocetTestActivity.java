@@ -103,7 +103,7 @@ public class SocetTestActivity extends AppCompatActivity  {
     }
 
     public void set_distance(View view) {
-        ControlSendManager.set_distance(0, 0);
+        //ControlSendManager.set_distance(0, 0);
     }
 
     public void set_work_mode(View view) {

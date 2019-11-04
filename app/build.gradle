@@ -44,5 +44,6 @@ dependencies {
     compile 'com.github.bestTao:CoordinatorMenu:v1.0.2'
     compile 'com.github.zcweng:switch-button:0.0.3@aar'
     compile 'com.github.kongqw:AndroidRocker:1.0.1'
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
     implementation project(':lib')
 }
