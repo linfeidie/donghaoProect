@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import ac.scri.com.donghaoproect.nicedialog.BaseNiceDialog;
 import ac.scri.com.donghaoproect.nicedialog.NiceDialog;
 import ac.scri.com.donghaoproect.nicedialog.ViewConvertListener;
 import ac.scri.com.donghaoproect.nicedialog.ViewHolder;
+import fr.ganfra.materialspinner.MaterialSpinner;
 
 /**
  * https://github.com/qiantao94/CoordinatorMenu
@@ -34,6 +37,8 @@ import ac.scri.com.donghaoproect.nicedialog.ViewHolder;
  */
 public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
+    private String[] STATE_ITEMS = {"","idle", "sleep", "navi_straight", "navi_smart", "charge", "navi_auto"};
+
     private ImageView mHeadIv;
     private CoordinatorMenu mCoordinatorMenu;
     private ArrayList<Fragment> pages = null;
@@ -43,6 +48,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             tv_emergency_stop,tv_goal_reach,tv_lidar_exception;
     private IPEditText ip_address;
     private SwitchButton switch_button;
+    private MaterialSpinner state_spinner,ids_spinner;
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -59,10 +65,35 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         Log.e("linfd", e.getMessage());
                     }
                     //Tools.showToast("状态");
+                }else if(dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
+                    OnlineIdsEntity onlineIdsEntity = GsonUtil.GsonToBean(dataEntity.message, OnlineIdsEntity.class);
+                    showIds(onlineIdsEntity);
                 }
             }
         }
     };
+
+    private void showIds(final OnlineIdsEntity onlineIdsEntity) {
+        if(onlineIdsEntity != null && onlineIdsEntity.getIds().size() < 1) {
+            return;
+        }
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, onlineIdsEntity.getIds());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ids_spinner.setAdapter(adapter);
+        ids_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Contanst.CARID = onlineIdsEntity.getIds().get(i);
+                ControlSendManager.set_connet();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Tools.showToast("onNothingSelected");
+            }
+        });
+    }
 
     private void updateUI(SatusEntity satusEntity) {
         if(satusEntity == null || satusEntity.getRobot_state() == null) {
@@ -111,8 +142,25 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         ip_address = findViewById(R.id.ip_address);
         switch_button = findViewById(R.id.switch_button);
         switch_button.setChecked(false);
+        state_spinner = (MaterialSpinner) findViewById(R.id.state_spinner);
+        ids_spinner = findViewById(R.id.ids_spinner);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STATE_ITEMS);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        state_spinner.setAdapter(adapter);
+        state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Tools.showToast(ITEMS[i]);
+                ControlSendManager.set_work_mode(STATE_ITEMS[i]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Tools.showToast("onNothingSelected");
+            }
+        });
         switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
@@ -142,6 +190,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         @Override
                         public void onConnected(XTcpClient xTcpClient) {
                             super.onConnected(xTcpClient);
+
 //                            if(!switch_button.isChecked()) {
 //                                switch_button.setChecked(true);
 //                            }
@@ -183,7 +232,6 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
             @Override
             public void clickRightUp() {
-                //Tools.showToast("view clickRight");
                 Log.e("linfd","右消");
                 TimerManager.getInstance().removeMessage();
 
@@ -191,7 +239,6 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
             @Override
             public void clickRightDown() {
-                //Tools.showToast("view clickRightwdown");
                 TimerManager.getInstance().start(new LooperRunnable() {
                     @Override
                     public void call() {
@@ -221,14 +268,12 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             @Override
             public void clickCenter() {
                 ControlSendManager.stop();
-                //   showToast("view clickCenter");
             }
 
             @Override
             public void clickBottomUp() {
                 Log.e("linfd","后消");
                 TimerManager.getInstance().removeMessage();
-                //  showToast("view clickBottom");
             }
 
             @Override
@@ -266,6 +311,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 //                }
 //            }
 //        });
+
+
     }
 
     @Override
@@ -325,6 +372,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         sb_distance = seekBar;
                     }
                 });
+                sb_distance.setIndicatorTextFormat("${PROGRESS} 米");
+
                 sb_angular.setOnSeekChangeListener(new OnSimpleSeekChangeListener(){
                     @Override
                     public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
@@ -332,6 +381,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         sb_angular = seekBar;
                     }
                 });
+                sb_angular.setIndicatorTextFormat("${PROGRESS} °");
                 holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -342,7 +392,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     }
 
                 });
+
             }
-        }).setWidth(0).setHeight(200).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
+        }).setWidth(0).setHeight(250).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
     }
 }

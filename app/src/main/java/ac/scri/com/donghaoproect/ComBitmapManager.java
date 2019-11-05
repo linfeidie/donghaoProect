@@ -50,7 +50,7 @@ class ComBitmapManager {
     private void obtainBitmap() {
         File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(), "11.png");
         mapBackground = BitmapFactory.decodeFile(file.getAbsolutePath());
-        mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.yuandian); // 间接调用
+        mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.jiantou); // 间接调用
     }
 
     private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect,float angle) {

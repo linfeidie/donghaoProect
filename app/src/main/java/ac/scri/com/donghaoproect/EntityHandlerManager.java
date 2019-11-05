@@ -70,7 +70,15 @@ public class EntityHandlerManager {
                 ServerInfo serverInfo = GsonUtil.GsonToBean(messageJson, ServerInfo.class);
                 if(mHandlerCallback != null) {
                     mHandlerCallback.callback(serverInfo.getState().equalsIgnoreCase("online"));
+
                 }
+                break;
+
+            case Contanst.GET_ONLINE_IDS:
+               // Tools.showToast(messageJson);
+                dataEntity.setType(typeEntity.getType());
+                dataEntity.message = messageJson ;
+                DataChanger.getInstance().postData(dataEntity);
                 break;
         }
     }

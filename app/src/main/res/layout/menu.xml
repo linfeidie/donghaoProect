@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="10dp"
     android:background="#fff">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="#9ED5E4"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="@color/major"
+            android:text="选择连入小车编号:"/>
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/ids_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_arrowColor="@color/major"
+            app:ms_alignLabels="true"
+            app:ms_baseColor="@color/major"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="@color/major"
+            android:text="选择小车工作模式:"/>
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/state_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_arrowColor="@color/major"
+            app:ms_alignLabels="true"
+            app:ms_baseColor="@color/major"
+            />
+    </LinearLayout>
+
     <com.suke.widget.SwitchButton
         android:id="@+id/switch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:sb_checked_color="@color/major"
         />
 
     <ac.scri.com.donghaoproect.IPEditText

@@ -85,23 +85,23 @@ public class ControlSendManager {
 
     //设置连接机器
     public static  void set_connet(){
-        send_order(1,"set_connet");
+        send_order(Contanst.CARID,"set_connet");
     }
     //查询状态
     public static void get_status(){
-        send_order(1,"get_status");
+        send_order(Contanst.CARID,"get_status");
     }
 
     public static void get_path(){
-        send_order(1,"get_path");
+        send_order(Contanst.CARID,"get_path");
     }
 
     public static void get_map(){
-        send_order(1,"get_map");
+        send_order(Contanst.CARID,"get_map");
     }
     //查询gps
     public static void get_GPS(){
-        send_order(1,"get_GPS");
+        send_order(Contanst.CARID,"get_GPS");
     }
     //查询本机IPs
     public static void get_inet_ip(){
@@ -111,7 +111,7 @@ public class ControlSendManager {
     //设置特定距离和角度
     public static void set_distance(double dist,double turn,double linear_speed,double angular_speed){
         if (xTcpClient != null) {
-            OrderEntityDist entity = new OrderEntityDist(id,1,"set_distance");
+            OrderEntityDist entity = new OrderEntityDist(id,Contanst.CARID,"set_distance");
             entity.setDist(dist);
             entity.setTurn(turn);
             entity.setLinear_speed(linear_speed);
@@ -125,7 +125,7 @@ public class ControlSendManager {
 
     public static void set_work_mode(String work_mode){
         if (xTcpClient != null) {
-            OrderEntitySetWorkMode entity = new OrderEntitySetWorkMode(id,1,"set_work_mode");
+            OrderEntitySetWorkMode entity = new OrderEntitySetWorkMode(id,Contanst.CARID,"set_work_mode");
             entity.work_mode = work_mode;
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
@@ -136,7 +136,7 @@ public class ControlSendManager {
 //手动控制包
     public static void set_speed(double linear_speed,double angular_speed){
         if (xTcpClient != null) {
-            OrderEntitySetSpeed entity = new OrderEntitySetSpeed(id,1,"set_speed");
+            OrderEntitySetSpeed entity = new OrderEntitySetSpeed(id,Contanst.CARID,"set_speed");
             entity.linear_speed = linear_speed;
             entity.angular_speed = angular_speed;
             entity.timeout = 10;
@@ -178,9 +178,12 @@ public class ControlSendManager {
         }
     }
 
+    public static void get_online_ids(){
+        send_order(0,"get_online_ids");
+    }
     public static void set_max_speed(double max_linear_speed,double max_angular_speed){
         if (xTcpClient != null) {
-            OrderEntitySetMaxSpeed entity = new OrderEntitySetMaxSpeed(id,1,"set_max_speed");
+            OrderEntitySetMaxSpeed entity = new OrderEntitySetMaxSpeed(id,Contanst.CARID,"set_max_speed");
             entity.max_linear_speed = max_linear_speed;
             entity.max_angular_speed = max_angular_speed;
             String s = GsonUtil.GsonString(entity)+ "\n";
