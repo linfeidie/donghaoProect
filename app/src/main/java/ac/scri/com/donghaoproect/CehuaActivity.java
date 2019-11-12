@@ -49,6 +49,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private IPEditText ip_address;
     private SwitchButton switch_button;
     private MaterialSpinner state_spinner,ids_spinner;
+    private TextView tv_connected_tip;
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -68,6 +69,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 }else if(dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
                     OnlineIdsEntity onlineIdsEntity = GsonUtil.GsonToBean(dataEntity.message, OnlineIdsEntity.class);
                     showIds(onlineIdsEntity);
+                }else if(((DataEntity) data).getType().equalsIgnoreCase(Contanst.DISCONNECT)) {
+                    switch_button.toggle();
                 }
             }
         }
@@ -75,9 +78,10 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
     private void showIds(final OnlineIdsEntity onlineIdsEntity) {
         if(onlineIdsEntity != null && onlineIdsEntity.getIds().size() < 1) {
+            switch_button.setChecked(false);
             return;
         }
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, onlineIdsEntity.getIds());
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, Tools.positive_number(onlineIdsEntity.getIds()));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         ids_spinner.setAdapter(adapter);
@@ -144,6 +148,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         switch_button.setChecked(false);
         state_spinner = (MaterialSpinner) findViewById(R.id.state_spinner);
         ids_spinner = findViewById(R.id.ids_spinner);
+        tv_connected_tip = findViewById(R.id.tv_connected_tip);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STATE_ITEMS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -206,6 +211,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 //                    switch_button.setChecked(false);
 //                }
                 ip_address.setVisibility(isChecked?View.GONE:View.VISIBLE);
+                tv_connected_tip.setVisibility(isChecked?View.VISIBLE:View.GONE);
             }
         });
 
@@ -267,6 +273,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
             @Override
             public void clickCenter() {
+                TimerManager.getInstance().removeMessage();
                 ControlSendManager.stop();
             }
 

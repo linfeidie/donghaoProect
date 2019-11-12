@@ -34,4 +34,6 @@ public class Contanst {
     public static final String GET_ONLINE_IDS = "online_ids";//获取在线机器ID
 
     public static  int CARID = 0;//缓冲选择小车的ID
+
+    public static final String DISCONNECT = "disconnect";
 }

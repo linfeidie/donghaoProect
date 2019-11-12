@@ -119,7 +119,7 @@ public class ControlSendManager {
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
-            Toast.makeText(mContext, "还没有连接到服务器", Toast.LENGTH_SHORT).show();
+            Tools.showToast("还没有连接到服务器");
         }
     }
 
@@ -130,7 +130,7 @@ public class ControlSendManager {
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
-            Toast.makeText(mContext, "还没有连接到服务器", Toast.LENGTH_SHORT).show();
+            Tools.showToast("还没有连接到服务器");
         }
     }
 //手动控制包
@@ -144,7 +144,7 @@ public class ControlSendManager {
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
-            Toast.makeText(mContext, "还没有连接到服务器", Toast.LENGTH_SHORT).show();
+            Tools.showToast("还没有连接到服务器");
         }
     }
 
@@ -174,7 +174,7 @@ public class ControlSendManager {
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
-            Toast.makeText(mContext, "还没有连接到服务器", Toast.LENGTH_SHORT).show();
+            Tools.showToast("还没有连接到服务器");
         }
     }
 
@@ -189,7 +189,7 @@ public class ControlSendManager {
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
-            Toast.makeText(mContext, "还没有连接到服务器", Toast.LENGTH_SHORT).show();
+            Tools.showToast("还没有连接到服务器");
         }
     }
 }

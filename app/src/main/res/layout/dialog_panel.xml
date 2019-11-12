@@ -37,6 +37,7 @@
                 app:isb_track_background_color="@color/major"
                 app:isb_thumb_color="@color/major"
                 app:isb_track_progress_color="@color/major"
+                app:isb_progress_value_float="true"
                 />
 
             <!--your layout-->

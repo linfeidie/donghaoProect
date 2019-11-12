@@ -15,9 +15,12 @@ import com.blanke.xsocket.tcp.client.listener.TcpClientListener;
  * 版本号：donghaoProect
  */
 public abstract class PackagesHandleCallback implements TcpClientListener {
+
+    boolean flag = true;
     private StringBuffer incompleteJson = new StringBuffer();
     @Override
     public void onConnected(XTcpClient xTcpClient) {
+        flag = true;
         Tools.showToast(xTcpClient.getTargetInfo().getIp() + "连接成功");
         ControlSendManager.set_online();
         ControlSendManager.get_online_ids();
@@ -31,7 +34,14 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
 
     @Override
     public void onDisconnected(XTcpClient xTcpClient, String s, Exception e) {
-        Tools.showToast(s);
+
+        if(flag) {
+            Tools.showToast(s);
+            DataEntity entity = new DataEntity();
+            entity.setType(Contanst.DISCONNECT);
+            DataChanger.getInstance().postData(entity);
+            flag = false;
+        }
 
     }
 

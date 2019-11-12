@@ -7,11 +7,33 @@
     android:padding="10dp"
     android:background="#fff">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="#9ED5E4"/>
 
+    <FrameLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="280dp"
+        android:layout_height="100dp">
+        <ac.scri.com.donghaoproect.IPEditText
+            android:id="@+id/ip_address"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <TextView
+            android:id="@+id/tv_connected_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:text="已连接服务器"/>
+    </FrameLayout>
+
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/switch_button"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        app:sb_checked_color="@color/major"
+        />
 
 
     <LinearLayout
@@ -55,18 +77,7 @@
             />
     </LinearLayout>
 
-    <com.suke.widget.SwitchButton
-        android:id="@+id/switch_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:sb_checked_color="@color/major"
-        />
 
-    <ac.scri.com.donghaoproect.IPEditText
-        android:id="@+id/ip_address"
-        android:layout_width="280dp"
-        android:layout_height="100dp"
-      />
   <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent">

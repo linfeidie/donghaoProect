@@ -88,7 +88,7 @@ public class RegionView extends View {
         mPaint = new Paint();
         mPaint.setStyle(Style.FILL);
         mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.parseColor("#218868"));
+        mPaint.setColor(Color.parseColor("#1296db"));
 
         mClickPaint = new Paint(mPaint);
         mClickPaint.setColor(Color.parseColor("#B03060"));

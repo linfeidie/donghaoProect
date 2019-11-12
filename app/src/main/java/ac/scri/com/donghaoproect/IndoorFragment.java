@@ -58,8 +58,8 @@ public class IndoorFragment extends Fragment {
                     return;
                 }
 
-                double left = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getY() - satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution());
-                double top = 1728 - (-(Contanst.MAPPARAMENTITY.getOrigin().getX() - satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution());
+                double left = Contanst.MAPPARAMENTITY.getWidth() - (-(Contanst.MAPPARAMENTITY.getOrigin().getY() - satusEntity.getAxis_y())/Contanst.MAPPARAMENTITY.getResolution());
+                double top = Contanst.MAPPARAMENTITY.getHeight() - (-(Contanst.MAPPARAMENTITY.getOrigin().getX() - satusEntity.getAxis_x())/Contanst.MAPPARAMENTITY.getResolution());
 
                 Log.e("linfd",satusEntity.getAxis_x()+"==="+satusEntity.getAxis_y());
                // Log.e("linfd",left+"==="+top);

@@ -2,6 +2,9 @@ package ac.scri.com.donghaoproect;
 
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 文件描述：.
  * <p> 一些常用工具类
@@ -11,6 +14,7 @@ import android.widget.Toast;
  */
 public class Tools {
     private static Toast mToast;
+    public static final boolean isDebug = true;
     public static void showToast(String message) {
 
         if (mToast == null) {
@@ -19,7 +23,10 @@ public class Tools {
         } else {
             mToast.setText(message);
         }
-        mToast.show();
+        if(isDebug) {
+            mToast.show();
+        }
+
     }
 
     public static void runOnUiThread(Runnable runnable) {
@@ -31,4 +38,19 @@ public class Tools {
             DonghaoApplication.getHandler().post(runnable);
         }
     }
+
+    //集合里过滤掉所有负整数
+    public static <T> List<Integer> positive_number(List<Integer> list) {
+        List<Integer> rList = new ArrayList<>();
+        if(list != null && list.size()>1){
+            for (int i = 0; i < list.size(); i++) {
+                if(list.get(i) > 0) {
+                    rList.add(list.get(i));
+                }
+            }
+        }
+        ((ArrayList<T>) rList).trimToSize();//释放申请的多余的空间
+        return rList;
+    }
+
 }
