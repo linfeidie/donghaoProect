@@ -66,11 +66,17 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         Log.e("linfd", e.getMessage());
                     }
                     //Tools.showToast("状态");
+
                 }else if(dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
                     OnlineIdsEntity onlineIdsEntity = GsonUtil.GsonToBean(dataEntity.message, OnlineIdsEntity.class);
                     showIds(onlineIdsEntity);
                 }else if(((DataEntity) data).getType().equalsIgnoreCase(Contanst.DISCONNECT)) {
-                    switch_button.toggle();
+                    if(switch_button.isChecked()) {
+                        switch_button.toggle();
+                        clearShow();
+                    }
+
+
                 }
             }
         }
@@ -81,7 +87,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             switch_button.setChecked(false);
             return;
         }
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, Tools.positive_number(onlineIdsEntity.getIds()));
+        //  ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, Tools.positive_number(onlineIdsEntity.getIds()));
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, onlineIdsEntity.getIds());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         ids_spinner.setAdapter(adapter);
@@ -90,6 +97,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Contanst.CARID = onlineIdsEntity.getIds().get(i);
                 ControlSendManager.set_connet();
+                //ControlSendManager.get_map();
             }
 
             @Override
@@ -117,6 +125,20 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         tv_lidar_exception.setText("雷达异常:"+(satusEntity.getRobot_state().isLidar_exception()?"是":"否"));
 
     }
+    private void clearShow(){
+        tv_work_mode.setText("工作模式:");
+        tv_battery_percent.setText("电量:");
+        tv_battery_volt.setText("电压:");
+        tv_linear_speed.setText("线速度:");
+        tv_angular_speed.setText("角速度:");
+        tv_charging_state.setText("充电状态:");
+        tv_driver_fail.setText("驱动异常:");
+        tv_motor_overload.setText("电机过载:");
+        tv_slam_exception.setText("slam异常：");
+        tv_emergency_stop.setText("急停:");
+        tv_goal_reach.setText("达到目的地:");
+        tv_lidar_exception.setText("雷达异常:");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +147,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         getSupportActionBar().hide();
         DataChanger.getInstance().addObserver(watcher);
         initView();
-        ip_address.setIpAddress("192.168.1.102");
+        ip_address.setIpAddress("192.168.1.107");
     }
 
 
@@ -392,10 +414,11 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
-                        sb_distance.setProgress(0);
-                        sb_angular.setProgress(0);
-                        dialog.dismiss();
+//                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
+//                        sb_distance.setProgress(0);
+//                        sb_angular.setProgress(0);
+//                        dialog.dismiss();  xs
+                        ControlSendManager.get_map();
                     }
 
                 });

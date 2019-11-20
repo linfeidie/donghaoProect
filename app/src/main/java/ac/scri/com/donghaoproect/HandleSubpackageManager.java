@@ -1,6 +1,7 @@
 package ac.scri.com.donghaoproect;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,7 +17,6 @@ public class HandleSubpackageManager {
     private int packNum = -1;
     private MapdataEntity supperMapData;
     private List<MapdataEntity> mapdataEntities ;
-    private StringBuffer incompleteJson = new StringBuffer();
     private FinishListener listener;
 
     public static HandleSubpackageManager getInstance(FinishListener listener) {
@@ -44,7 +44,7 @@ public class HandleSubpackageManager {
         mapdataEntities.add(entity);
 
         if (mapdataEntities.size() == packNum) {
-
+            Collections.sort(mapdataEntities);
             for (int i = 0; i < packNum; i++) {
                 if (i == 0) {
                     supperMapData = mapdataEntities.get(0);

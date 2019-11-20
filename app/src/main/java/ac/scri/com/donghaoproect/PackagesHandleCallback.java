@@ -22,8 +22,9 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
     public void onConnected(XTcpClient xTcpClient) {
         flag = true;
         Tools.showToast(xTcpClient.getTargetInfo().getIp() + "连接成功");
-        ControlSendManager.set_online();
-        ControlSendManager.get_online_ids();
+
+        ControlSendManager.set_online();//注册
+        ControlSendManager.get_online_ids();// 获取ids
 
     }
 

@@ -97,7 +97,7 @@ public class ControlSendManager {
     }
 
     public static void get_map(){
-        send_order(Contanst.CARID,"get_map");
+        send_order(Contanst.CARID,"get_nav_map");
     }
     //查询gps
     public static void get_GPS(){

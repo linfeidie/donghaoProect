@@ -9,7 +9,7 @@ import java.util.List;
  * <p>
  * 版本号：donghaoProect
  */
-public class MapdataEntity extends TypeEntity{
+public class MapdataEntity extends TypeEntity implements Comparable<MapdataEntity>{
 
 
     /**
@@ -74,5 +74,12 @@ public class MapdataEntity extends TypeEntity{
 
     public void setData(List<Integer> data) {
         this.data = data;
+    }
+
+    @Override
+    public int compareTo(MapdataEntity mapdataEntity) {
+        int i = this.getPack_count() - mapdataEntity.getPack_count();//先按照年龄排序
+        return i;
+
     }
 }

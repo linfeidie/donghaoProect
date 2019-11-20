@@ -27,13 +27,24 @@
     </FrameLayout>
 
 
-    <com.suke.widget.SwitchButton
-        android:id="@+id/switch_button"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        app:sb_checked_color="@color/major"
-        />
+        android:orientation="horizontal">
+        <com.suke.widget.SwitchButton
+            android:id="@+id/switch_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            app:sb_checked_color="@color/major"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="设置"/>
+    </LinearLayout>
+
 
 
     <LinearLayout
