@@ -1,5 +1,6 @@
 package ac.scri.com.donghaoproect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +51,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private SwitchButton switch_button;
     private MaterialSpinner state_spinner,ids_spinner;
     private TextView tv_connected_tip;
+    private TextView tv_setting;
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -97,7 +99,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Contanst.CARID = onlineIdsEntity.getIds().get(i);
                 ControlSendManager.set_connet();
-                //ControlSendManager.get_map();
+                ControlSendManager.get_map();
             }
 
             @Override
@@ -171,6 +173,15 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         state_spinner = (MaterialSpinner) findViewById(R.id.state_spinner);
         ids_spinner = findViewById(R.id.ids_spinner);
         tv_connected_tip = findViewById(R.id.tv_connected_tip);
+        tv_setting = findViewById(R.id.tv_setting);
+
+        tv_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(CehuaActivity.this,SettingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STATE_ITEMS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -414,11 +425,10 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
-//                        sb_distance.setProgress(0);
-//                        sb_angular.setProgress(0);
-//                        dialog.dismiss();  xs
-                        ControlSendManager.get_map();
+                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
+                        sb_distance.setProgress(0);
+                        sb_angular.setProgress(0);
+                        dialog.dismiss();
                     }
 
                 });

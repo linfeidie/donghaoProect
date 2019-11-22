@@ -150,19 +150,19 @@ public class ControlSendManager {
 
     // 向前走
     public static void forward(){
-        set_speed(0.3,0);
+        set_speed(Contanst.LINEAR_SPEED,0);
     }
 
     public static void backward(){
-        set_speed(-0.3,0);
+        set_speed(-Contanst.LINEAR_SPEED,0);
     }
 
     public static void leftward(){
-        set_speed(0,0.3);
+        set_speed(0,Contanst.ANGULAR_SPEED);
     }
 
     public static void rightward(){
-        set_speed(0,-0.3);
+        set_speed(0,-Contanst.ANGULAR_SPEED);
     }
 
     public static void stop(){

@@ -11,7 +11,7 @@ public class Contanst {
 
     public static  MapParamEntity MAPPARAMENTITY = null;
 
-    public static final String PORT = "7665"; //服务器端口
+    public static  String PORT = "7665"; //服务器端口
 
     public static final int ORDER_INTERVAL = 500 ; //按钮按下命令间隔
 
@@ -36,4 +36,8 @@ public class Contanst {
     public static  int CARID = 0;//缓冲选择小车的ID
 
     public static final String DISCONNECT = "disconnect";
+
+    public static  double LINEAR_SPEED = 0; //线性速度
+
+    public static double ANGULAR_SPEED = 0 ; //角速度
 }

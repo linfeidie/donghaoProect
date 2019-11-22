@@ -53,6 +53,10 @@ class ComBitmapManager {
         mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.jiantou); // 间接调用
     }
 
+    /*
+    * 背景图和定位图结合
+    * */
+
     private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect,float angle) {
         if (background == null) {
             return null;
@@ -75,6 +79,10 @@ class ComBitmapManager {
 //        cv.restore();//存储adjustPhotoRotation(foreground,angle),
         return newbmp;
     }
+
+    /*
+    * 对背景图旋转
+    * */
 
     private Bitmap rotateBitmap(Bitmap origin, float alpha) {
         if (origin == null) {

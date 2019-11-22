@@ -18,4 +18,9 @@
         <item name="android:windowEnterAnimation">@anim/enter_anim</item>
         <item name="android:windowExitAnimation">@anim/exit_anim</item>
     </style>
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/major</item>
+        <item name="colorControlActivated">@color/major</item>
+    </style>
+
 </resources>

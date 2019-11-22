@@ -1,15 +1,20 @@
 package ac.scri.com.donghaoproect;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * 文件描述：.
@@ -52,7 +57,7 @@ public class IndoorFragment extends Fragment {
         Tools.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Tools.showToast(360*satusEntity.getRobot_yaw()/(2*Math.PI)+"");
+                //Tools.showToast(360*satusEntity.getRobot_yaw()/(2*Math.PI)+"");
                 //Log.e("linfd", "完成拼接2");
                 if(Contanst.MAPPARAMENTITY == null) {
                     return;
@@ -94,22 +99,7 @@ public class IndoorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         iv_bitmap = view.findViewById(R.id.iv_bitmap);
-//        Tools.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Tools.showToast("显示");
-//                Log.e("linfd", "完成拼接2");
-//                double left = 1318;
-//                double top = 222;
-//                Rect rect = new Rect((int)left,(int)top,0,0);
-//                ComBitmapManager.getInstance().startComposite(rect, new ComBitmapManager.CompositeMapListener() {
-//                    @Override
-//                    public void compositeMapCallBack(Bitmap mapComposite) {
-//                        iv_bitmap.setImageBitmap(mapComposite);
-//                    }
-//                });
-//            }
-//        });
+        iv_bitmap.setOnTouchListener(imgSourceOnTouchListener);
     }
 
     @Override
@@ -139,4 +129,62 @@ public class IndoorFragment extends Fragment {
             }
         }).handerMap(messageJson);
     }
+
+    private View.OnTouchListener imgSourceOnTouchListener = new View.OnTouchListener()
+    {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event)
+        {
+            float eventX = event.getX();
+            float eventY = event.getY();
+            float[] eventXY = new float[] {eventX, eventY};
+
+            Matrix invertMatrix = new Matrix();
+            ((ImageView)view).getImageMatrix().invert(invertMatrix);
+
+            invertMatrix.mapPoints(eventXY);
+            int x = Integer.valueOf((int)eventXY[0]);
+            int y = Integer.valueOf((int)eventXY[1]);
+
+
+            Log.e("IndoorFragment", "touched position: "
+                    + String.valueOf(eventX) + " / "
+                    + String.valueOf(eventY));
+
+            Log.e("IndoorFragment","touched position: "
+                    + String.valueOf(x) + " / "
+                    + String.valueOf(y));
+
+            Drawable imgDrawable = ((ImageView)view).getDrawable();
+            Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
+
+            Log.e("IndoorFragment","drawable size: "
+                    + String.valueOf(bitmap.getWidth()) + " / "
+                    + String.valueOf(bitmap.getHeight()));
+            //Limit x, y range within bitmap
+            if(x < 0)
+            {
+                x = 0;
+            }
+            else if(x > bitmap.getWidth()-1)
+            {
+                x = bitmap.getWidth()-1;
+            }
+
+            if(y < 0)
+            {
+                y = 0;
+            }
+            else if(y > bitmap.getHeight()-1)
+            {
+                y = bitmap.getHeight()-1;
+            }
+
+            int touchedRGB = bitmap.getPixel(x, y);
+
+
+            return true;
+        }
+    };
 }

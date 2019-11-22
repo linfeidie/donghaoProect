@@ -1746,4 +1746,7 @@ public class PinchImageView extends AppCompatImageView {
             }
         }
     }
+
+
+
 }

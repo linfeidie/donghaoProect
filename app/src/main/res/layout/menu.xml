@@ -39,6 +39,7 @@
             app:sb_checked_color="@color/major"
             />
         <TextView
+            android:id="@+id/tv_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
