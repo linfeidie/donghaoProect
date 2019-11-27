@@ -26,6 +26,10 @@ import android.widget.ImageView;
 public class IndoorFragment extends Fragment {
 
     private PinchImageView iv_bitmap;
+    private int touchX = 0;
+    private int touchY = 0 ;
+    private float yy =0 ;//上传到服务端的描点
+    private float xx = 0;
 
     private DataWatcher watcher=new DataWatcher() {
         @Override
@@ -100,6 +104,14 @@ public class IndoorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         iv_bitmap = view.findViewById(R.id.iv_bitmap);
         iv_bitmap.setOnTouchListener(imgSourceOnTouchListener);
+        iv_bitmap.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Rect rect = new Rect(touchX,touchY,0,0);
+                ComBitmapManager.getInstance().addTouchPoint(rect);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -136,55 +148,51 @@ public class IndoorFragment extends Fragment {
         @Override
         public boolean onTouch(View view, MotionEvent event)
         {
-            float eventX = event.getX();
-            float eventY = event.getY();
-            float[] eventXY = new float[] {eventX, eventY};
 
-            Matrix invertMatrix = new Matrix();
-            ((ImageView)view).getImageMatrix().invert(invertMatrix);
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                float eventX = event.getX();
+                float eventY = event.getY();
+                float[] eventXY = new float[] {eventX, eventY};
 
-            invertMatrix.mapPoints(eventXY);
-            int x = Integer.valueOf((int)eventXY[0]);
-            int y = Integer.valueOf((int)eventXY[1]);
+                Matrix invertMatrix = new Matrix();
+                ((ImageView)view).getImageMatrix().invert(invertMatrix);
+
+                invertMatrix.mapPoints(eventXY);
+                touchX = Integer.valueOf((int)eventXY[0]);
+                touchY = Integer.valueOf((int)eventXY[1]);
 
 
-            Log.e("IndoorFragment", "touched position: "
-                    + String.valueOf(eventX) + " / "
-                    + String.valueOf(eventY));
-
-            Log.e("IndoorFragment","touched position: "
-                    + String.valueOf(x) + " / "
-                    + String.valueOf(y));
 
             Drawable imgDrawable = ((ImageView)view).getDrawable();
             Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
 
-            Log.e("IndoorFragment","drawable size: "
-                    + String.valueOf(bitmap.getWidth()) + " / "
-                    + String.valueOf(bitmap.getHeight()));
-            //Limit x, y range within bitmap
-            if(x < 0)
+            if(touchX < 0)
             {
-                x = 0;
+                touchX = 0;
             }
-            else if(x > bitmap.getWidth()-1)
+            else if(touchX > bitmap.getWidth()-1)
             {
-                x = bitmap.getWidth()-1;
+                touchX = bitmap.getWidth()-1;
             }
 
-            if(y < 0)
+            if(touchY < 0)
             {
-                y = 0;
+                touchY = 0;
             }
-            else if(y > bitmap.getHeight()-1)
+            else if(touchY > bitmap.getHeight()-1)
             {
-                y = bitmap.getHeight()-1;
+                touchY = bitmap.getHeight()-1;
             }
 
-            int touchedRGB = bitmap.getPixel(x, y);
+                yy = (float) (-(touchX-1728)*0.05-21.2);
+                Log.e("IndoorFragment",""
+                        + yy );
+                xx = (float) (-(touchX-1728)*0.05-77.2);
+                Log.e("IndoorFragment",""
+                        + xx );
+            }
 
-
-            return true;
+            return  false;
         }
     };
 }

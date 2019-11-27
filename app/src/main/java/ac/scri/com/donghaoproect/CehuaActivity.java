@@ -149,7 +149,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         getSupportActionBar().hide();
         DataChanger.getInstance().addObserver(watcher);
         initView();
-        ip_address.setIpAddress("192.168.1.107");
+       // ip_address.setIpAddress("192.168.1.107");
+        ip_address.setIpAddress("10.42.0.1");
     }
 
 

@@ -3,10 +3,15 @@ package ac.scri.com.donghaoproect;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件描述：.
@@ -21,6 +26,7 @@ class ComBitmapManager {
     private Bitmap mapLocation;
     private Bitmap mapComposite;
     private CompositeMapListener listener;
+    private List<Rect> points = new ArrayList<>();
     private Matrix matrix = null;
 
     static ComBitmapManager getInstance() {
@@ -38,6 +44,12 @@ class ComBitmapManager {
         matrix = new Matrix();
     }
 
+
+    public void addTouchPoint(Rect rect){
+        if(rect != null) {
+            points.add(rect);
+        }
+    }
     //开始合成
     public void startComposite(Rect rect, float angle, CompositeMapListener listener) {
         obtainBitmap();
@@ -47,6 +59,9 @@ class ComBitmapManager {
         }
     }
 
+    /*
+    * 获取背景图片和箭头
+    * */
     private void obtainBitmap() {
         File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(), "11.png");
         mapBackground = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -77,6 +92,22 @@ class ComBitmapManager {
 //        cv.save(Canvas.ALL_SAVE_FLAG);//保存
 //        //store
 //        cv.restore();//存储adjustPhotoRotation(foreground,angle),
+
+        if (points.size() > 1) {
+            Paint paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(10f);
+//设置Path
+            Path path = new Path();
+//屏幕左上角（0,0）到（200,400）画一条直线
+            path.moveTo(points.get(0).left, points.get(0).top);
+            for (int i = 1; i < points.size(); i++) {
+                path.lineTo(points.get(i).left, points.get(i).top);
+            }
+
+            cv.drawPath(path, paint);
+        }
         return newbmp;
     }
 
