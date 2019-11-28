@@ -24,6 +24,7 @@ public class ControlSendManager {
     private static XTcpClient xTcpClient;
     private static Context mContext = DonghaoApplication.getApplication();
     private static int id = -9;
+    private static int click_count = 1;//描点数
 
     public static void  init(Context context,String ipAddress, TcpClientListener listener){
         TcpClientManager.sMXTcpClients.clear();
@@ -186,6 +187,26 @@ public class ControlSendManager {
             OrderEntitySetMaxSpeed entity = new OrderEntitySetMaxSpeed(id,Contanst.CARID,"set_max_speed");
             entity.max_linear_speed = max_linear_speed;
             entity.max_angular_speed = max_angular_speed;
+            String s = GsonUtil.GsonString(entity)+ "\n";
+            xTcpClient.sendMsg(s);
+        } else {
+            Tools.showToast("还没有连接到服务器");
+        }
+    }
+
+    public static void set_click_point(float xServer,float yServer){
+        if (xTcpClient != null) {
+            TouchPointEntity entity = new TouchPointEntity();
+            entity.setFrom_id(id);
+            entity.setPoint_num(click_count);
+            click_count++;
+            entity.setTo_id(Contanst.CARID);
+            TouchPointEntity.PointsEntity pointsEntity = new TouchPointEntity.PointsEntity();
+            pointsEntity.setX(xServer);
+            pointsEntity.setY(yServer);
+            pointsEntity.setZ(0);
+            entity.setPoints(pointsEntity);
+            entity.setType(Contanst.SET_CLICK_POINT);
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {

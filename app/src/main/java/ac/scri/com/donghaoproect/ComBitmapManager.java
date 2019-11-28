@@ -28,6 +28,8 @@ class ComBitmapManager {
     private CompositeMapListener listener;
     private List<Rect> points = new ArrayList<>();
     private Matrix matrix = null;
+    private Paint paint ;
+
 
     static ComBitmapManager getInstance() {
         if (ourInstance == null) {
@@ -42,6 +44,10 @@ class ComBitmapManager {
 
     private ComBitmapManager() {
         matrix = new Matrix();
+        paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(10f);
     }
 
 
@@ -94,10 +100,7 @@ class ComBitmapManager {
 //        cv.restore();//存储adjustPhotoRotation(foreground,angle),
 
         if (points.size() > 1) {
-            Paint paint = new Paint();
-            paint.setColor(Color.RED);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(10f);
+
 //设置Path
             Path path = new Path();
 //屏幕左上角（0,0）到（200,400）画一条直线
@@ -107,6 +110,8 @@ class ComBitmapManager {
             }
 
             cv.drawPath(path, paint);
+        }else if(points.size() == 1) {
+            cv.drawPoint(points.get(0).left, points.get(0).top,paint);
         }
         return newbmp;
     }

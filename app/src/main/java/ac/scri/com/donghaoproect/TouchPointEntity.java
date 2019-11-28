@@ -8,7 +8,7 @@ package ac.scri.com.donghaoproect;
  * <p>
  * 版本号：donghaoProect
  */
-public class TouchPointEntity {
+public class TouchPointEntity extends TypeEntity{
 
     /**
      * from_id : 1
@@ -20,7 +20,6 @@ public class TouchPointEntity {
 
     private int from_id;
     private int to_id;
-    private String type;
     private int point_num;
     private PointsEntity points;
 
@@ -40,13 +39,6 @@ public class TouchPointEntity {
         this.to_id = to_id;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public int getPoint_num() {
         return point_num;
