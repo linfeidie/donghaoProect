@@ -89,7 +89,7 @@ public class IndoorFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataChanger.getInstance().addObserver(watcher);
-        ControlSendManager.set_work_mode("navi_straight");
+       // ControlSendManager.set_work_mode("navi_straight");
 
     }
 

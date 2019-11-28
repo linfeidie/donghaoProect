@@ -437,4 +437,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             }
         }).setWidth(0).setHeight(250).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
     }
+
+    public void action(View view){
+        ControlSendManager.set_action();
+    }
 }

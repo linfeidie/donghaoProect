@@ -194,6 +194,9 @@ public class ControlSendManager {
         }
     }
 
+    /*
+    * 设置描点
+    * */
     public static void set_click_point(float xServer,float yServer){
         if (xTcpClient != null) {
             TouchPointEntity entity = new TouchPointEntity();
@@ -207,6 +210,21 @@ public class ControlSendManager {
             pointsEntity.setZ(0);
             entity.setPoints(pointsEntity);
             entity.setType(Contanst.SET_CLICK_POINT);
+            String s = GsonUtil.GsonString(entity)+ "\n";
+            xTcpClient.sendMsg(s);
+        } else {
+            Tools.showToast("还没有连接到服务器");
+        }
+    }
+
+    public static void set_action(){
+        if (xTcpClient != null) {
+           ActionEntity entity = new ActionEntity();
+           entity.setFrom_id(id);
+           entity.setTo_id(Contanst.CARID);
+           entity.setType("set_action");
+           entity.setAction("start");
+           entity.setCycle(false);
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {
