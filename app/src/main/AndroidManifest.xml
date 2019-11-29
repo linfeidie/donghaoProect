@@ -23,14 +23,14 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="bDxGYGtKnQQQ7Ip2iWc8QotSaNDg0q1U" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
 
         </activity>
-        <activity android:name=".SocetTestActivity"
+        <activity android:name=".activity.SocetTestActivity"
             >
 
         </activity>
-        <activity android:name=".CehuaActivity"
+        <activity android:name=".activity.CehuaActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".activity.SettingActivity"></activity>
     </application>
 
 </manifest>

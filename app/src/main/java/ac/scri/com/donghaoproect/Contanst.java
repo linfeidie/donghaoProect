@@ -1,5 +1,7 @@
 package ac.scri.com.donghaoproect;
 
+import ac.scri.com.donghaoproect.entity.MapParamEntity;
+
 /**
  * 文件描述：.
  * <p>
@@ -9,7 +11,7 @@ package ac.scri.com.donghaoproect;
  */
 public class Contanst {
 
-    public static  MapParamEntity MAPPARAMENTITY = null;
+    public static MapParamEntity MAPPARAMENTITY = null;
 
     public static  String PORT = "7665"; //服务器端口
 

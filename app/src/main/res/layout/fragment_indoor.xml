@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<ac.scri.com.donghaoproect.PinchImageView
+<ac.scri.com.donghaoproect.view.PinchImageView
     android:id="@+id/iv_bitmap"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

@@ -6,12 +6,12 @@
     android:gravity="center_horizontal"
     android:background="#fff">
 
-    <ac.scri.com.donghaoproect.CommnetViewPager
+    <ac.scri.com.donghaoproect.view.CommnetViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="300dp"></ac.scri.com.donghaoproect.CommnetViewPager>
+        android:layout_height="300dp"></ac.scri.com.donghaoproect.view.CommnetViewPager>
 
-    <ac.scri.com.donghaoproect.RegionView
+    <ac.scri.com.donghaoproect.view.RegionView
         android:id="@+id/regionView"
         android:layout_width="match_parent"
         android:layout_height="200dp"

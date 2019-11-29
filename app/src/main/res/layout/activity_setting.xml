@@ -37,13 +37,13 @@
             android:layout_gravity="center_vertical"
             android:text="设置线速度:" />
 
-        <ac.scri.com.donghaoproect.NumberAddSubView
+        <ac.scri.com.donghaoproect.view.NumberAddSubView
             android:id="@+id/linear_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            app:value="0.3"></ac.scri.com.donghaoproect.NumberAddSubView>
+            app:value="0.3"></ac.scri.com.donghaoproect.view.NumberAddSubView>
     </LinearLayout>
 
     <LinearLayout
@@ -57,13 +57,13 @@
             android:layout_gravity="center_vertical"
             android:text="设置角速度:" />
 
-        <ac.scri.com.donghaoproect.NumberAddSubView
+        <ac.scri.com.donghaoproect.view.NumberAddSubView
             android:id="@+id/angular_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            app:value="0.3"></ac.scri.com.donghaoproect.NumberAddSubView>
+            app:value="0.3"></ac.scri.com.donghaoproect.view.NumberAddSubView>
     </LinearLayout>
 
     <TextView
