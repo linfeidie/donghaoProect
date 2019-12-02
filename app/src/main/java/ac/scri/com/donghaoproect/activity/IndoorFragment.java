@@ -125,6 +125,13 @@ public class IndoorFragment extends Fragment {
             public boolean onLongClick(View view) {
                 Rect rect = new Rect(touchX, touchY, 0, 0);
                 ComBitmapManager.getInstance().addTouchPoint(rect);
+                yServer = (float) (-(touchX - Contanst.MAPPARAMENTITY.getWidth()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getY());
+                Log.e("IndoorFragment", "yServer"
+                        + yServer);
+                xServer = (float) (-(touchY - Contanst.MAPPARAMENTITY.getHeight()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getX());
+                Log.e("IndoorFragment", "xServer"
+                        + xServer);
+                ControlSendManager.set_click_point(xServer, yServer);
                 return false;
             }
         });
@@ -191,13 +198,8 @@ public class IndoorFragment extends Fragment {
                     touchY = bitmap.getHeight() - 1;
                 }
 
-                yServer = (float) (-(touchX - Contanst.MAPPARAMENTITY.getWidth()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getY());
-                Log.e("IndoorFragment", "yServer"
-                        + yServer);
-                xServer = (float) (-(touchY - Contanst.MAPPARAMENTITY.getHeight()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getX());
-                Log.e("IndoorFragment", "xServer"
-                        + xServer);
-                ControlSendManager.set_click_point(xServer, yServer);
+
+
 
             }
 

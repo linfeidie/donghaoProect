@@ -57,7 +57,8 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  */
 public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
-    private String[] STATE_ITEMS = {"","idle", "sleep", "navi_straight", "navi_smart", "charge", "navi_auto"};
+    private String[] STATE_ITEMS = {"idle", "sleep", "navi_straight", "navi_smart", "charge", "navi_auto"};
+    private String[] STATE_ITEMS2 = {"空闲", "睡眠", "直行", "智能", "充电", "自动"};
 
     private ImageView mHeadIv;
     private CoordinatorMenu mCoordinatorMenu;
@@ -91,6 +92,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 }else if(dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
                     OnlineIdsEntity onlineIdsEntity = GsonUtil.GsonToBean(dataEntity.message, OnlineIdsEntity.class);
                     showIds(onlineIdsEntity);
+                    Contanst.IP_ADDRESS = ip_address.getIpAddress();//记住IP地址
                 }else if(((DataEntity) data).getType().equalsIgnoreCase(Contanst.DISCONNECT)) {
                     if(switch_button.isChecked()) {
                         switch_button.toggle();
@@ -169,7 +171,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         DataChanger.getInstance().addObserver(watcher);
         initView();
        // ip_address.setIpAddress("192.168.1.107");
-        ip_address.setIpAddress("10.42.0.1");
+        ip_address.setIpAddress(Contanst.IP_ADDRESS);
     }
 
 
@@ -203,15 +205,16 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STATE_ITEMS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, STATE_ITEMS2);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         state_spinner.setAdapter(adapter);
         state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //Tools.showToast(ITEMS[i]);
-                ControlSendManager.set_work_mode(STATE_ITEMS[i]);
+
+                Contanst.CURRENTSTATE = Contanst.RobotState.valueOf(STATE_ITEMS[i]);
+                ControlSendManager.set_work_mode(Contanst.CURRENTSTATE.name());
             }
 
             @Override

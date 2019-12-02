@@ -44,4 +44,31 @@ public class Contanst {
     public static  double LINEAR_SPEED = 0; //线性速度
 
     public static double ANGULAR_SPEED = 0 ; //角速度
+
+    public static RobotState CURRENTSTATE = RobotState.idle;//当前是状态，默认是空闲
+
+    public static String IP_ADDRESS = "192.168.1.139";
+
+
+    /*
+    * 机器人状态
+    * */
+    public static  enum RobotState{
+        idle(0,"空闲"), sleep(1,"睡眠"), navi_straight(2,"直行"), navi_smart(3,"智能"), charge(4,"充电"), navi_auto(5,"自动");
+
+        RobotState(int number, String description) {
+            this.code = number;
+            this.description = description;
+        }
+        private int code;
+        private String description;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
 }

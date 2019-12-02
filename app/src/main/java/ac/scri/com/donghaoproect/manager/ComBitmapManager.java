@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -31,7 +32,10 @@ public class ComBitmapManager {
     private CompositeMapListener listener;
     private List<Rect> points = new ArrayList<>();
     private Matrix matrix = null;
-    private Paint paint ;
+    private Paint paint ;//画描点的笔
+    private Canvas cv;
+    private Path path ;
+    private Bitmap newbmp; //产生的第三方图
 
 
     public static ComBitmapManager getInstance() {
@@ -48,9 +52,13 @@ public class ComBitmapManager {
     private ComBitmapManager() {
         matrix = new Matrix();
         paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.GREEN);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10f);
+        paint.setStrokeWidth(3f);
+        paint.setAntiAlias(true);
+        paint.setPathEffect(new CornerPathEffect(5));
+
+        path = new Path();
     }
 
 
@@ -105,8 +113,7 @@ public class ComBitmapManager {
         if (points.size() > 1) {
 
 //设置Path
-            Path path = new Path();
-//屏幕左上角（0,0）到（200,400）画一条直线
+
             path.moveTo(points.get(0).left, points.get(0).top);
             for (int i = 1; i < points.size(); i++) {
                 path.lineTo(points.get(i).left, points.get(i).top);
