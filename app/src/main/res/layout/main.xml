@@ -46,4 +46,6 @@
         android:layout_marginEnd="41dp"
         android:layout_marginRight="41dp"
         android:text="描点走起" />
+
+
 </com.qiantao.coordinatormenu.MainView>

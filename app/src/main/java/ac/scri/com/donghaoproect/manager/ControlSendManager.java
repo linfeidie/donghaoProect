@@ -15,15 +15,16 @@ import com.blanke.xsocket.utils.StringValidationUtils;
 
 import ac.scri.com.donghaoproect.Contanst;
 import ac.scri.com.donghaoproect.DonghaoApplication;
-import ac.scri.com.donghaoproect.tool.GsonUtil;
-import ac.scri.com.donghaoproect.tool.Tools;
 import ac.scri.com.donghaoproect.entity.ActionEntity;
+import ac.scri.com.donghaoproect.entity.IinitPoseEntity;
 import ac.scri.com.donghaoproect.entity.OrderEntity;
 import ac.scri.com.donghaoproect.entity.OrderEntityDist;
 import ac.scri.com.donghaoproect.entity.OrderEntitySetMaxSpeed;
 import ac.scri.com.donghaoproect.entity.OrderEntitySetSpeed;
 import ac.scri.com.donghaoproect.entity.OrderEntitySetWorkMode;
 import ac.scri.com.donghaoproect.entity.TouchPointEntity;
+import ac.scri.com.donghaoproect.tool.GsonUtil;
+import ac.scri.com.donghaoproect.tool.Tools;
 
 /**
  * 文件描述：.
@@ -228,7 +229,10 @@ public class ControlSendManager {
             Tools.showToast("还没有连接到服务器");
         }
     }
-
+/*
+*
+* 描点后启动
+* */
     public static void set_action(){
         if (xTcpClient != null) {
            ActionEntity entity = new ActionEntity();
@@ -237,6 +241,31 @@ public class ControlSendManager {
            entity.setType("set_action");
            entity.setAction("start");
            entity.setCycle(false);
+            String s = GsonUtil.GsonString(entity)+ "\n";
+            xTcpClient.sendMsg(s);
+        } else {
+            Tools.showToast("还没有连接到服务器");
+        }
+    }
+
+
+    /*
+    * 重定位
+    *
+    * */
+
+    public static void set_init_pose(double x,double y, double yaw){
+        if (xTcpClient != null) {
+            IinitPoseEntity entity = new IinitPoseEntity();
+            entity.setFrom_id(id);
+            entity.setTo_id(Contanst.CARID);
+            entity.setType(Contanst.SET_INIT_POSE);
+            IinitPoseEntity.PoseEntity poseEntity = new IinitPoseEntity.PoseEntity();
+            poseEntity.setX(x);
+            poseEntity.setY(y);
+            poseEntity.setZ(0f);
+            poseEntity.setYaw(0f);
+            entity.setPose(poseEntity);
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);
         } else {

@@ -37,6 +37,8 @@ public class Contanst {
 
     public static final String SET_CLICK_POINT = "set_click_point";//上传服务器描点类型
 
+    public static final String SET_INIT_POSE = "set_init_pose";//重定位  上传
+
     public static  int CARID = 0;//缓冲选择小车的ID
 
     public static final String DISCONNECT = "disconnect";

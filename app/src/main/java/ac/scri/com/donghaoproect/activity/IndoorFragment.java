@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import ac.scri.com.donghaoproect.Contanst;
@@ -41,6 +43,8 @@ import ac.scri.com.donghaoproect.view.PinchImageView;
 public class IndoorFragment extends Fragment {
 
     private PinchImageView iv_bitmap;
+    private CheckBox cb_init_post ;
+    private boolean is_init_post = false;//是否在重定位
     private int touchX = 0;
     private int touchY = 0;
     private float yServer = 0;//上传到服务端的描点
@@ -119,19 +123,38 @@ public class IndoorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         iv_bitmap = view.findViewById(R.id.iv_bitmap);
+        cb_init_post = view.findViewById(R.id.cb_init_post);
+
+        cb_init_post.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                is_init_post = b;
+            }
+        });
         iv_bitmap.setOnTouchListener(imgSourceOnTouchListener);
         iv_bitmap.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Rect rect = new Rect(touchX, touchY, 0, 0);
-                ComBitmapManager.getInstance().addTouchPoint(rect);
                 yServer = (float) (-(touchX - Contanst.MAPPARAMENTITY.getWidth()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getY());
                 Log.e("IndoorFragment", "yServer"
                         + yServer);
                 xServer = (float) (-(touchY - Contanst.MAPPARAMENTITY.getHeight()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getX());
                 Log.e("IndoorFragment", "xServer"
                         + xServer);
-                ControlSendManager.set_click_point(xServer, yServer);
+
+
+                if(is_init_post) {//如果是重定位
+
+                    ControlSendManager.set_init_pose(xServer,yServer,0f);
+                    cb_init_post.setChecked(false);
+
+                }else{//否则是描点
+                    Rect rect = new Rect(touchX, touchY, 0, 0);
+                    ComBitmapManager.getInstance().addTouchPoint(rect);
+
+                    ControlSendManager.set_click_point(xServer, yServer);
+                }
+
                 return false;
             }
         });

@@ -23,16 +23,14 @@ import com.warkiz.widget.IndicatorSeekBar;
 import java.util.ArrayList;
 
 import ac.scri.com.donghaoproect.Contanst;
-import ac.scri.com.donghaoproect.observer.DataChanger;
-import ac.scri.com.donghaoproect.observer.DataWatcher;
 import ac.scri.com.donghaoproect.LooperRunnable;
-import ac.scri.com.donghaoproect.listener.OnSimpleSeekChangeListener;
-import ac.scri.com.donghaoproect.listener.PackagesHandleCallback;
 import ac.scri.com.donghaoproect.R;
 import ac.scri.com.donghaoproect.entity.DataEntity;
 import ac.scri.com.donghaoproect.entity.OnlineIdsEntity;
 import ac.scri.com.donghaoproect.entity.SatusEntity;
 import ac.scri.com.donghaoproect.entity.TypeEntity;
+import ac.scri.com.donghaoproect.listener.OnSimpleSeekChangeListener;
+import ac.scri.com.donghaoproect.listener.PackagesHandleCallback;
 import ac.scri.com.donghaoproect.manager.ControlSendManager;
 import ac.scri.com.donghaoproect.manager.EntityHandlerManager;
 import ac.scri.com.donghaoproect.manager.TimerManager;
@@ -40,6 +38,8 @@ import ac.scri.com.donghaoproect.nicedialog.BaseNiceDialog;
 import ac.scri.com.donghaoproect.nicedialog.NiceDialog;
 import ac.scri.com.donghaoproect.nicedialog.ViewConvertListener;
 import ac.scri.com.donghaoproect.nicedialog.ViewHolder;
+import ac.scri.com.donghaoproect.observer.DataChanger;
+import ac.scri.com.donghaoproect.observer.DataWatcher;
 import ac.scri.com.donghaoproect.tool.GsonUtil;
 import ac.scri.com.donghaoproect.tool.Tools;
 import ac.scri.com.donghaoproect.view.CommnetViewPager;
@@ -72,6 +72,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private MaterialSpinner state_spinner,ids_spinner;
     private TextView tv_connected_tip;
     private TextView tv_setting;
+
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -196,6 +197,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         ids_spinner = findViewById(R.id.ids_spinner);
         tv_connected_tip = findViewById(R.id.tv_connected_tip);
         tv_setting = findViewById(R.id.tv_setting);
+
 
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
