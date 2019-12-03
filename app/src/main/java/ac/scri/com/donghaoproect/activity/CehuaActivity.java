@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,7 +45,6 @@ import ac.scri.com.donghaoproect.tool.GsonUtil;
 import ac.scri.com.donghaoproect.tool.Tools;
 import ac.scri.com.donghaoproect.view.CommnetViewPager;
 import ac.scri.com.donghaoproect.view.IPEditText;
-import ac.scri.com.donghaoproect.view.RegionView;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 /**
@@ -55,7 +55,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  * <p>
  * 版本号：donghaoProect
  */
-public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,View.OnTouchListener {
 
     private String[] STATE_ITEMS = {"idle", "sleep", "navi_straight", "navi_smart", "charge", "navi_auto"};
     private String[] STATE_ITEMS2 = {"空闲", "睡眠", "直行", "智能", "充电", "自动"};
@@ -64,15 +64,15 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private CoordinatorMenu mCoordinatorMenu;
     private ArrayList<Fragment> pages = null;
     private CommnetViewPager viewpager = null;
-    private RegionView mRegionView;
-    private TextView tv_work_mode,tv_car_num,tv_battery_percent,tv_battery_volt,tv_linear_speed,tv_angular_speed,tv_charging_state,tv_driver_fail,tv_motor_overload,tv_slam_exception,
-            tv_emergency_stop,tv_goal_reach,tv_lidar_exception;
+    // private RegionView mRegionView;
+    private TextView tv_work_mode, tv_car_num, tv_battery_percent, tv_battery_volt, tv_linear_speed, tv_angular_speed, tv_charging_state, tv_driver_fail, tv_motor_overload, tv_slam_exception,
+            tv_emergency_stop, tv_goal_reach, tv_lidar_exception;
     private IPEditText ip_address;
     private SwitchButton switch_button;
-    private MaterialSpinner state_spinner,ids_spinner;
+    private MaterialSpinner state_spinner, ids_spinner;
     private TextView tv_connected_tip;
     private TextView tv_setting;
-
+    private TextView tv_control_top, tv_control_left, tv_control_right, tv_control_bottom;
 
 
     private DataWatcher watcher = new DataWatcher() {
@@ -90,12 +90,12 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     }
                     //Tools.showToast("状态");
 
-                }else if(dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
+                } else if (dataEntity.getType().equalsIgnoreCase(Contanst.GET_ONLINE_IDS)) {
                     OnlineIdsEntity onlineIdsEntity = GsonUtil.GsonToBean(dataEntity.message, OnlineIdsEntity.class);
                     showIds(onlineIdsEntity);
                     Contanst.IP_ADDRESS = ip_address.getIpAddress();//记住IP地址
-                }else if(((DataEntity) data).getType().equalsIgnoreCase(Contanst.DISCONNECT)) {
-                    if(switch_button.isChecked()) {
+                } else if (((DataEntity) data).getType().equalsIgnoreCase(Contanst.DISCONNECT)) {
+                    if (switch_button.isChecked()) {
                         switch_button.toggle();
                         clearShow();
                     }
@@ -107,7 +107,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     };
 
     private void showIds(final OnlineIdsEntity onlineIdsEntity) {
-        if(onlineIdsEntity != null && onlineIdsEntity.getIds().size() < 1) {
+        if (onlineIdsEntity != null && onlineIdsEntity.getIds().size() < 1) {
             switch_button.setChecked(false);
             return;
         }
@@ -132,24 +132,25 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     }
 
     private void updateUI(SatusEntity satusEntity) {
-        if(satusEntity == null || satusEntity.getRobot_state() == null) {
+        if (satusEntity == null || satusEntity.getRobot_state() == null) {
             return;
         }
-        tv_work_mode.setText("工作模式:"+satusEntity.getWork_mode());
-        tv_battery_percent.setText("电量:"+satusEntity.getBattery_percent()+"%");
-        tv_battery_volt.setText("电压:"+satusEntity.getBattery_volt()+"V");
-        tv_linear_speed.setText("线速度:"+satusEntity.getLinear_speed()+"m/s");
-        tv_angular_speed.setText("角速度:"+satusEntity.getAngular_speed()+"rad/s");
-        tv_charging_state.setText("充电状态:"+(satusEntity.getRobot_state().isCharging_state()?"是":"否"));
-        tv_driver_fail.setText("驱动异常:"+(satusEntity.getRobot_state().isDriver_fail()?"是":"否"));
-        tv_motor_overload.setText("电机过载:"+(satusEntity.getRobot_state().isMotor_overload()?"是":"否"));
-        tv_slam_exception.setText("slam异常："+(satusEntity.getRobot_state().isSlam_exception()?"是":"否"));
-        tv_emergency_stop.setText("急停:"+(satusEntity.getRobot_state().isEmergency_stop()?"是":"否"));
-        tv_goal_reach.setText("达到目的地:"+(satusEntity.getRobot_state().isGoal_reach()?"是":"否"));
-        tv_lidar_exception.setText("雷达异常:"+(satusEntity.getRobot_state().isLidar_exception()?"是":"否"));
+        tv_work_mode.setText("工作模式:" + satusEntity.getWork_mode());
+        tv_battery_percent.setText("电量:" + satusEntity.getBattery_percent() + "%");
+        tv_battery_volt.setText("电压:" + satusEntity.getBattery_volt() + "V");
+        tv_linear_speed.setText("线速度:" + satusEntity.getLinear_speed() + "m/s");
+        tv_angular_speed.setText("角速度:" + satusEntity.getAngular_speed() + "rad/s");
+        tv_charging_state.setText("充电状态:" + (satusEntity.getRobot_state().isCharging_state() ? "是" : "否"));
+        tv_driver_fail.setText("驱动异常:" + (satusEntity.getRobot_state().isDriver_fail() ? "是" : "否"));
+        tv_motor_overload.setText("电机过载:" + (satusEntity.getRobot_state().isMotor_overload() ? "是" : "否"));
+        tv_slam_exception.setText("slam异常：" + (satusEntity.getRobot_state().isSlam_exception() ? "是" : "否"));
+        tv_emergency_stop.setText("急停:" + (satusEntity.getRobot_state().isEmergency_stop() ? "是" : "否"));
+        tv_goal_reach.setText("达到目的地:" + (satusEntity.getRobot_state().isGoal_reach() ? "是" : "否"));
+        tv_lidar_exception.setText("雷达异常:" + (satusEntity.getRobot_state().isLidar_exception() ? "是" : "否"));
 
     }
-    private void clearShow(){
+
+    private void clearShow() {
         tv_work_mode.setText("工作模式:");
         tv_battery_percent.setText("电量:");
         tv_battery_volt.setText("电压:");
@@ -171,7 +172,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         getSupportActionBar().hide();
         DataChanger.getInstance().addObserver(watcher);
         initView();
-       // ip_address.setIpAddress("192.168.1.107");
+        // ip_address.setIpAddress("192.168.1.107");
         ip_address.setIpAddress(Contanst.IP_ADDRESS);
     }
 
@@ -197,12 +198,21 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         ids_spinner = findViewById(R.id.ids_spinner);
         tv_connected_tip = findViewById(R.id.tv_connected_tip);
         tv_setting = findViewById(R.id.tv_setting);
+        tv_control_top = findViewById(R.id.tv_control_top);
+        tv_control_left = findViewById(R.id.tv_control_left);
+        tv_control_right = findViewById(R.id.tv_control_right);
+        tv_control_bottom = findViewById(R.id.tv_control_bottom);
 
+        tv_control_top.setOnTouchListener(this);
+
+        tv_control_left.setOnTouchListener(this);
+        tv_control_right.setOnTouchListener(this);
+        tv_control_bottom.setOnTouchListener(this);
 
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(CehuaActivity.this,SettingActivity.class);
+                Intent intent = new Intent(CehuaActivity.this, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -228,8 +238,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
 
-                if(isChecked) {
-                    ControlSendManager.init(CehuaActivity.this,ip_address.getIpAddress(), new PackagesHandleCallback() {
+                if (isChecked) {
+                    ControlSendManager.init(CehuaActivity.this, ip_address.getIpAddress(), new PackagesHandleCallback() {
                         @Override
                         public void messageCallback(TypeEntity typeEntity, String message) {
                             EntityHandlerManager.handerEntity(typeEntity, message, new EntityHandlerManager.HandlerCallback() {
@@ -260,7 +270,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                         }
                     });
                     ControlSendManager.connect();
-                }else {
+                } else {
                     ControlSendManager.disconnect();
                 }
 //                if(switch_button.isChecked()) {
@@ -268,90 +278,12 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 //                }else  {
 //                    switch_button.setChecked(false);
 //                }
-                ip_address.setVisibility(isChecked?View.GONE:View.VISIBLE);
-                tv_connected_tip.setVisibility(isChecked?View.VISIBLE:View.GONE);
+                ip_address.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                tv_connected_tip.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
 
-        mRegionView = (RegionView) findViewById(R.id.regionView);
 
-        mRegionView.setListener(new RegionView.RegionViewClickListener() {
-
-            @Override
-            public void clickTopUp() {
-                //Tools.showToast("view clickTop");
-                TimerManager.getInstance().removeMessage();
-            }
-
-            @Override
-            public void clickTopDown() {
-                TimerManager.getInstance().start(new LooperRunnable() {
-                    @Override
-                    public void call() {
-                         Log.e("linfd","前");
-                        ControlSendManager.forward();
-                    }
-                });
-            }
-
-            @Override
-            public void clickRightUp() {
-                Log.e("linfd","右消");
-                TimerManager.getInstance().removeMessage();
-
-            }
-
-            @Override
-            public void clickRightDown() {
-                TimerManager.getInstance().start(new LooperRunnable() {
-                    @Override
-                    public void call() {
-                        //Log.e("linfd","右");
-                        ControlSendManager.rightward();
-                    }
-                });
-            }
-
-            @Override
-            public void clickLeftUp() {
-                Log.e("linfd","左消");
-                TimerManager.getInstance().removeMessage();
-            }
-
-            @Override
-            public void clickLeftDown() {
-                TimerManager.getInstance().start(new LooperRunnable() {
-                    @Override
-                    public void call() {
-                         Log.e("linfd","左");
-                        ControlSendManager.leftward();
-                    }
-                });
-            }
-
-            @Override
-            public void clickCenter() {
-                TimerManager.getInstance().removeMessage();
-                ControlSendManager.stop();
-            }
-
-            @Override
-            public void clickBottomUp() {
-                Log.e("linfd","后消");
-                TimerManager.getInstance().removeMessage();
-            }
-
-            @Override
-            public void clickBottomDown() {
-                TimerManager.getInstance().start(new LooperRunnable() {
-                    @Override
-                    public void call() {
-                         Log.e("linfd","后");
-                        ControlSendManager.backward();
-                    }
-                });
-            }
-        });
         pages = new ArrayList<Fragment>();
         mCoordinatorMenu = (CoordinatorMenu) findViewById(R.id.menu);
         viewpager = findViewById(R.id.viewpager);
@@ -404,6 +336,56 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            switch (view.getId()) {
+                case R.id.tv_control_top:
+                    Log.e("linfd", "前");
+                    TimerManager.getInstance().start(new LooperRunnable() {
+                        @Override
+                        public void call() {
+                            ControlSendManager.forward();
+                        }
+                    });
+                    break;
+                case R.id.tv_control_left:
+                    Log.e("linfd", "左");
+                    TimerManager.getInstance().start(new LooperRunnable() {
+                        @Override
+                        public void call() {
+                            ControlSendManager.leftward();
+                        }
+                    });
+                    break;
+                case R.id.tv_control_right:
+                    Log.e("linfd","右");
+                    TimerManager.getInstance().start(new LooperRunnable() {
+                        @Override
+                        public void call() {
+                            ControlSendManager.rightward();
+                        }
+                    });
+                    break;
+                case R.id.tv_control_bottom:
+                    Log.e("linfd", "后");
+                    TimerManager.getInstance().start(new LooperRunnable() {
+                        @Override
+                        public void call() {
+                            ControlSendManager.backward();
+                        }
+                    });
+                    break;
+            }
+        }else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            Log.e("linfd", "消");
+            TimerManager.getInstance().removeMessage();
+        }
+
+        return true;
+    }
+
 
     // adapter
     private class MyAdapter extends FragmentPagerAdapter {
@@ -422,15 +404,16 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }
     }
 
-     IndicatorSeekBar sb_distance;
+    IndicatorSeekBar sb_distance;
     IndicatorSeekBar sb_angular;
-    public void done(View view ){
+
+    public void done(View view) {
         NiceDialog.init().setLayoutId(R.layout.dialog_panel).setConvertListener(new ViewConvertListener() {
             @Override
             public void convertView(ViewHolder holder, final BaseNiceDialog dialog) {
-                 sb_distance = holder.getView(R.id.sb_distance);
-                 sb_angular = holder.getView(R.id.sb_angular);
-                sb_distance.setOnSeekChangeListener(new OnSimpleSeekChangeListener(){
+                sb_distance = holder.getView(R.id.sb_distance);
+                sb_angular = holder.getView(R.id.sb_angular);
+                sb_distance.setOnSeekChangeListener(new OnSimpleSeekChangeListener() {
                     @Override
                     public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
                         super.onStopTrackingTouch(seekBar);
@@ -439,7 +422,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 });
                 sb_distance.setIndicatorTextFormat("${PROGRESS} 米");
 
-                sb_angular.setOnSeekChangeListener(new OnSimpleSeekChangeListener(){
+                sb_angular.setOnSeekChangeListener(new OnSimpleSeekChangeListener() {
                     @Override
                     public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
                         super.onStopTrackingTouch(seekBar);
@@ -450,7 +433,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()),sb_angular.getProgressFloat(),sb_distance.getProgressFloat()>0?0.3:-0.3,sb_angular.getProgressFloat()>0?0.3:-0.3);
+                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()), sb_angular.getProgressFloat(), sb_distance.getProgressFloat() > 0 ? 0.3 : -0.3, sb_angular.getProgressFloat() > 0 ? 0.3 : -0.3);
                         sb_distance.setProgress(0);
                         sb_angular.setProgress(0);
                         dialog.dismiss();
@@ -462,7 +445,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }).setWidth(0).setHeight(250).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
     }
 
-    public void action(View view){
+    public void action(View view) {
         ControlSendManager.set_action();
     }
 }
