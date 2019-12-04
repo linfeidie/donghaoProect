@@ -72,7 +72,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private MaterialSpinner state_spinner, ids_spinner;
     private TextView tv_connected_tip;
     private TextView tv_setting;
-    private TextView tv_control_top, tv_control_left, tv_control_right, tv_control_bottom;
+    private TextView tv_control_top,tv_control_left, tv_control_right, tv_control_bottom;
+
 
 
     private DataWatcher watcher = new DataWatcher() {
