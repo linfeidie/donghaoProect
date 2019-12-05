@@ -9,7 +9,7 @@ import ac.scri.com.donghaoproect.entity.MapdataEntity;
 
 /**
  * 文件描述：.
- * <p> 处理分包的管理类
+ * <p> 处理分包的管理类  一个个包排序并组合成非解压数据（一个大的entity类）
  * 作者：Created by 林飞堞 on 2019/10/15
  * <p>
  * 版本号：donghaoProect
@@ -18,7 +18,7 @@ public class HandleSubpackageManager {
     private static volatile HandleSubpackageManager ourInstance ;
 
     private int packNum = -1;
-    private MapdataEntity supperMapData;
+    private MapdataEntity supperMapData;//完整一个数据包，是非解压的数据（注意：没有解压的）
     private List<MapdataEntity> mapdataEntities ;
     private FinishListener listener;
 
@@ -47,7 +47,7 @@ public class HandleSubpackageManager {
         mapdataEntities.add(entity);
 
         if (mapdataEntities.size() == packNum) {
-            Collections.sort(mapdataEntities);
+            Collections.sort(mapdataEntities);//排序
             for (int i = 0; i < packNum; i++) {
                 if (i == 0) {
                     supperMapData = mapdataEntities.get(0);

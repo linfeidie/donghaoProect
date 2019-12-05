@@ -17,16 +17,16 @@ import ac.scri.com.donghaoproect.entity.MapdataEntity;
 
 /**
  * 文件描述：.
- * <p>
+ * <p>作用，把非解压数据变成最原始数据，转成bitmap 存储和回调
  * 作者：Created by 林飞堞 on 2019/9/29
  * <p>
  * 版本号：Socket_learning
  */
 public class ObtainMapManager {
 
-    private List<Integer> compressData ;
+    private List<Integer> compressData ;//非解压数据
     private List<Integer> tempData = new ArrayList<>();
-    private List<Integer> fillData ;
+    private List<Integer> fillData ;//解压后的原始数据
     private MapdataEntity mMapdata;
     private int height;
     private int width;
@@ -79,9 +79,6 @@ public class ObtainMapManager {
                     e.printStackTrace();
                     Tools.showToast("地图异常");
                 }
-//                if(i > 384) {
-//                   Tools.showToast("超过了");
-//                }
             }
         }
         if(bitmap != null && mapListenter != null) {

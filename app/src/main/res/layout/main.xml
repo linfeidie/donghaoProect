@@ -111,7 +111,4 @@
             android:gravity="center"
             android:text="描点走起" />
     </android.support.percent.PercentRelativeLayout>
-
-
-
 </com.qiantao.coordinatormenu.MainView>

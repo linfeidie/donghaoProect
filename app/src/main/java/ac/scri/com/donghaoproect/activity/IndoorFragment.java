@@ -27,6 +27,7 @@ import ac.scri.com.donghaoproect.manager.ComBitmapManager;
 import ac.scri.com.donghaoproect.manager.ControlSendManager;
 import ac.scri.com.donghaoproect.manager.HandleSubpackageManager;
 import ac.scri.com.donghaoproect.manager.ObtainMapManager;
+import ac.scri.com.donghaoproect.manager.ThreadManager;
 import ac.scri.com.donghaoproect.observer.DataChanger;
 import ac.scri.com.donghaoproect.observer.DataWatcher;
 import ac.scri.com.donghaoproect.tool.GsonUtil;
@@ -72,7 +73,7 @@ public class IndoorFragment extends Fragment {
             }
         }
     };
-
+    Rect rect = new Rect();
     private void updateLocation(final SatusEntity satusEntity) {
         if (satusEntity == null || Contanst.MAPPARAMENTITY == null) {
             return;
@@ -91,8 +92,11 @@ public class IndoorFragment extends Fragment {
 
                 Log.e("linfd", satusEntity.getAxis_x() + "===" + satusEntity.getAxis_y());
                 // Log.e("linfd",left+"==="+top);
+                //弧度转角度
                 float angle = (float) (360 * satusEntity.getRobot_yaw() / (2 * Math.PI));
-                Rect rect = new Rect((int) left, (int) top, 0, 0);
+                Tools.showToast("yaw=="+satusEntity.getRobot_yaw());
+                rect.left = (int) left;
+                rect.top = (int) top;
                 ComBitmapManager.getInstance().startComposite(rect, angle, new ComBitmapManager.CompositeMapListener() {
                     @Override
                     public void compositeMapCallBack(Bitmap mapComposite) {
@@ -172,7 +176,7 @@ public class IndoorFragment extends Fragment {
             public void MapDateFinish(final MapdataEntity supperMapData) {
                 Tools.showToast("完成拼接");
                 Log.e("linfd", "完成拼接");
-                new Thread(new Runnable() {
+                ThreadManager.getInstance().createLongPool().execute(new Runnable() {
                     @Override
                     public void run() {
                         ObtainMapManager.getInstance(supperMapData).loadMap(new ObtainMapManager.MapListenter() {
@@ -183,7 +187,7 @@ public class IndoorFragment extends Fragment {
                             }
                         });
                     }
-                }).start();
+                });
             }
         }).handerMap(messageJson);
     }
@@ -220,9 +224,6 @@ public class IndoorFragment extends Fragment {
                 } else if (touchY > bitmap.getHeight() - 1) {
                     touchY = bitmap.getHeight() - 1;
                 }
-
-
-
 
             }
 
