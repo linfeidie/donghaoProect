@@ -31,10 +31,11 @@ public class ComBitmapManager {
     private Bitmap mapComposite;
     private CompositeMapListener listener;
     private List<Rect> points = new ArrayList<>();
+    private Rect resetPoint ;//重定位的点
     private Matrix matrix = null;
-    private Paint paint ;//画描点的笔
+    private Paint paint;//画描点的笔
     private Canvas cv;
-    private Path path ;
+    private Path path;
     private Bitmap newbmp; //产生的第三方图
 
 
@@ -62,34 +63,69 @@ public class ComBitmapManager {
     }
 
 
-    public void addTouchPoint(Rect rect){
-        if(rect != null) {
+    public void addTouchPoint(Rect rect) {
+        if (rect != null) {
             points.add(rect);
         }
     }
+
+    /*
+     *
+     *设置重定位的点
+     * */
+    public void setResetPoint(Rect resetPoint) {
+        this.resetPoint = resetPoint;
+    }
+/*
+*  清除重定位点
+*
+* */
+    public void clearResetPoint(){
+        resetPoint = null;
+    }
+
+    /*
+    *全部清除描点
+    * */
+    public void clearPoints(){
+        points.clear();
+    }
+
+    /*
+    *
+    * 不等于空说明有定位点
+    * */
+    public boolean isHasResetPoint(){
+
+        return resetPoint != null;
+    }
+
     //开始合成
     public void startComposite(Rect rect, float angle, CompositeMapListener listener) {
         obtainBitmap();
-        mapComposite = toConformBitmap(rotateBitmap(mapBackground, 90), mapLocation, rect,angle);
+        mapComposite = toConformBitmap(rotateBitmap(mapBackground, 90), mapLocation, rect, angle);
         if (listener != null && mapComposite != null) {
             listener.compositeMapCallBack(mapComposite);
         }
     }
 
     /*
-    * 获取背景图片和箭头
-    * */
+     * 获取背景图片和箭头
+     * */
     private void obtainBitmap() {
-        File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(), "11.png");
-        mapBackground = BitmapFactory.decodeFile(file.getAbsolutePath());
-        mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.jiantou); // 间接调用
+        if(mapBackground == null || mapLocation == null) {
+            File file = new File(DonghaoApplication.getApplication().getExternalCacheDir().getAbsolutePath(), "11.png");
+            mapBackground = BitmapFactory.decodeFile(file.getAbsolutePath());
+            mapLocation = BitmapFactory.decodeResource(DonghaoApplication.getApplication().getResources(), R.mipmap.jiantou); // 间接调用
+        }
+
     }
 
     /*
-    * 背景图和定位图结合
-    * */
+     * 背景图和定位图结合
+     * */
 
-    private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect,float angle) {
+    private Bitmap toConformBitmap(Bitmap background, Bitmap foreground, Rect rect, float angle) {
         if (background == null) {
             return null;
         }
@@ -104,7 +140,8 @@ public class ComBitmapManager {
         //draw bg into
         cv.drawBitmap(background, 0, 0, null);//在 0，0坐标开始画入bg
         //draw fg into
-        cv.drawBitmap(adjustPhotoRotation(foreground,angle), rect.left - fgWidth / 2, rect.top - fgHeight / 2, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
+        cv.drawBitmap(adjustPhotoRotation(foreground, angle), rect.left - fgWidth / 2, rect.top - fgHeight / 2, null);//在 0，0坐标开始画入fg ，可以从任意位置画入
+       // cv.drawBitmap(adjustPhotoRotation(foreground, angle), rect.left , rect.top , null);
         //save all clip
 //        cv.save(Canvas.ALL_SAVE_FLAG);//保存
 //        //store
@@ -113,22 +150,26 @@ public class ComBitmapManager {
         if (points.size() > 1) {
 
 //设置Path
-
             path.moveTo(points.get(0).left, points.get(0).top);
             for (int i = 1; i < points.size(); i++) {
                 path.lineTo(points.get(i).left, points.get(i).top);
             }
 
             cv.drawPath(path, paint);
-        }else if(points.size() == 1) {
-            cv.drawPoint(points.get(0).left, points.get(0).top,paint);
+//            Float[] ff= points.toArray(new Float[points.size()]);
+//            cv.drawLines(ff,paint);
+        } else if (points.size() == 1) {//只是一个点
+            cv.drawPoint(points.get(0).left, points.get(0).top, paint);
+        }
+        if(resetPoint != null) {
+            cv.drawPoint(resetPoint.left, resetPoint.top, paint);
         }
         return newbmp;
     }
 
     /*
-    * 对背景图旋转
-    * */
+     * 对背景图旋转
+     * */
 
     private Bitmap rotateBitmap(Bitmap origin, float alpha) {
         if (origin == null) {
@@ -144,14 +185,22 @@ public class ComBitmapManager {
         if (newBM.equals(origin)) {
             return newBM;
         }
-        origin.recycle();
+        //newBM.recycle();zj
+        if (origin != null && !origin.isRecycled())//zj
+        {
+            origin=null;
+        }
+        //origin.recycle();
         return newBM;
     }
 
     public interface CompositeMapListener {
         void compositeMapCallBack(Bitmap mapComposite);
     }
-
+/*
+*
+* 调整角度
+* */
     private Bitmap adjustPhotoRotation(Bitmap bm, final float orientationDegree) {
 
 

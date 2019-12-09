@@ -2,6 +2,7 @@ package ac.scri.com.donghaoproect.tool;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
@@ -48,7 +49,11 @@ public class GsonUtil {
         T t = null;
         if (gson != null) {
             //传入json对象和对象类型,将json转成对象
-            t = gson.fromJson(gsonString, cls);
+            try {
+                t = gson.fromJson(gsonString, cls);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
         }
         return t;
     }

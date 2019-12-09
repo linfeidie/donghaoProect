@@ -32,6 +32,7 @@ import ac.scri.com.donghaoproect.entity.SatusEntity;
 import ac.scri.com.donghaoproect.entity.TypeEntity;
 import ac.scri.com.donghaoproect.listener.OnSimpleSeekChangeListener;
 import ac.scri.com.donghaoproect.listener.PackagesHandleCallback;
+import ac.scri.com.donghaoproect.manager.ComBitmapManager;
 import ac.scri.com.donghaoproect.manager.ControlSendManager;
 import ac.scri.com.donghaoproect.manager.EntityHandlerManager;
 import ac.scri.com.donghaoproect.manager.TimerManager;
@@ -72,7 +73,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     private MaterialSpinner state_spinner, ids_spinner;
     private TextView tv_connected_tip;
     private TextView tv_setting;
-    private TextView tv_control_top,tv_control_left, tv_control_right, tv_control_bottom;
+    private TextView tv_control_top,tv_control_left, tv_control_right, tv_control_bottom,tv_control_center;
 
 
 
@@ -203,12 +204,21 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         tv_control_left = findViewById(R.id.tv_control_left);
         tv_control_right = findViewById(R.id.tv_control_right);
         tv_control_bottom = findViewById(R.id.tv_control_bottom);
+        tv_control_center = findViewById(R.id.tv_control_center);
 
         tv_control_top.setOnTouchListener(this);
 
         tv_control_left.setOnTouchListener(this);
         tv_control_right.setOnTouchListener(this);
         tv_control_bottom.setOnTouchListener(this);
+        tv_control_center.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //TimerManager.getInstance().removeMessage();
+                ControlSendManager.stop();
+                return false;
+            }
+        });
 
         tv_setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,7 +300,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         viewpager = findViewById(R.id.viewpager);
 
         // create new fragments
-        pages.add(new BaiduFragment());
+       // pages.add(new BaiduFragment());
         pages.add(new IndoorFragment());
 
         // set adapter
@@ -448,5 +458,9 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 
     public void action(View view) {
         ControlSendManager.set_action();
+    }
+
+    public void clearPoints(View view){
+        ComBitmapManager.getInstance().clearPoints();
     }
 }

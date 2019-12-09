@@ -33,6 +33,7 @@ import ac.scri.com.donghaoproect.observer.DataWatcher;
 import ac.scri.com.donghaoproect.tool.GsonUtil;
 import ac.scri.com.donghaoproect.tool.Tools;
 import ac.scri.com.donghaoproect.view.PinchImageView;
+import me.caibou.rockerview.JoystickView;
 
 /**
  * 文件描述：.
@@ -45,11 +46,13 @@ public class IndoorFragment extends Fragment {
 
     private PinchImageView iv_bitmap;
     private CheckBox cb_init_post ;
+    private JoystickView joystickView;
     private boolean is_init_post = false;//是否在重定位
     private int touchX = 0;
     private int touchY = 0;
     private float yServer = 0;//上传到服务端的描点
     private float xServer = 0;
+    private Rect rect = new Rect();//覆盖的位置
 
     private DataWatcher watcher = new DataWatcher() {
         @Override
@@ -73,7 +76,7 @@ public class IndoorFragment extends Fragment {
             }
         }
     };
-    Rect rect = new Rect();
+
     private void updateLocation(final SatusEntity satusEntity) {
         if (satusEntity == null || Contanst.MAPPARAMENTITY == null) {
             return;
@@ -90,13 +93,16 @@ public class IndoorFragment extends Fragment {
                 double left = Contanst.MAPPARAMENTITY.getWidth() - (-(Contanst.MAPPARAMENTITY.getOrigin().getY() - satusEntity.getAxis_y()) / Contanst.MAPPARAMENTITY.getResolution());
                 double top = Contanst.MAPPARAMENTITY.getHeight() - (-(Contanst.MAPPARAMENTITY.getOrigin().getX() - satusEntity.getAxis_x()) / Contanst.MAPPARAMENTITY.getResolution());
 
-                Log.e("linfd", satusEntity.getAxis_x() + "===" + satusEntity.getAxis_y());
+               // Log.e("linfd", satusEntity.getAxis_x() + "===" + satusEntity.getAxis_y());
                 // Log.e("linfd",left+"==="+top);
                 //弧度转角度
                 float angle = (float) (360 * satusEntity.getRobot_yaw() / (2 * Math.PI));
-                Tools.showToast("yaw=="+satusEntity.getRobot_yaw());
+                //Tools.showToast("yaw=="+satusEntity.getRobot_yaw());
                 rect.left = (int) left;
                 rect.top = (int) top;
+                /*
+                * 解析出定位点位置和角度，画上去
+                * */
                 ComBitmapManager.getInstance().startComposite(rect, angle, new ComBitmapManager.CompositeMapListener() {
                     @Override
                     public void compositeMapCallBack(Bitmap mapComposite) {
@@ -128,17 +134,60 @@ public class IndoorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         iv_bitmap = view.findViewById(R.id.iv_bitmap);
         cb_init_post = view.findViewById(R.id.cb_init_post);
+        joystickView = view.findViewById(R.id.joystick);
 
+        joystickView.setAngleUpdateListener(new JoystickView.OnAngleUpdateListener() {
+            @Override
+            public void onAngleUpdate(double angle, int action) {
+                // 解析
+                double  angle2 = (angle+90)>180?-((angle+90)-360):-(angle+90);
+                double yaw = (2 * Math.PI * angle2)/360;//自己调整的角度转为弧度
+                Rect rect1 = new Rect();
+                rect1.left = (int) touchX;
+                rect1.top = (int) touchY;
+                if (action == JoystickView.ACTION_RELEASE){
+                    //取消
+                    ComBitmapManager.getInstance().clearResetPoint();
+                    ControlSendManager.set_init_pose(xServer,yServer,yaw);
+                    joystickView.setVisibility(View.GONE);
+                    cb_init_post.setChecked(false);
+                } else {
+
+                    ComBitmapManager.getInstance().startComposite(rect1, (float) angle2, new ComBitmapManager.CompositeMapListener() {
+                        @Override
+                        public void compositeMapCallBack(Bitmap mapComposite) {
+                            iv_bitmap.setImageBitmap(mapComposite);
+                        }
+                    });
+                    //Tools.showToast(action+"=="+yaw);
+                }
+            }
+        });
         cb_init_post.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 is_init_post = b;
+                if(b) {
+                    joystickView.setVisibility(View.VISIBLE);
+                }
             }
         });
         iv_bitmap.setOnTouchListener(imgSourceOnTouchListener);
+
+        /*
+        *
+        * 长按地图
+        * */
         iv_bitmap.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                if(Contanst.MAPPARAMENTITY == null) {
+                    Tools.showToast("还没有地图哦");
+                    cb_init_post.setChecked(false);
+                    joystickView.setVisibility(View.GONE);
+                    //直接返回
+                    return false;
+                }
                 yServer = (float) (-(touchX - Contanst.MAPPARAMENTITY.getWidth()) * Contanst.MAPPARAMENTITY.getResolution() + Contanst.MAPPARAMENTITY.getOrigin().getY());
                 Log.e("IndoorFragment", "yServer"
                         + yServer);
@@ -149,7 +198,10 @@ public class IndoorFragment extends Fragment {
 
                 if(is_init_post) {//如果是重定位
 
-                    ControlSendManager.set_init_pose(xServer,yServer,0f);
+                    //ControlSendManager.set_init_pose(xServer,yServer,0f);
+                    Rect rect = new Rect(touchX, touchY, 0, 0);
+                    ComBitmapManager.getInstance().setResetPoint(rect);
+
                     cb_init_post.setChecked(false);
 
                 }else{//否则是描点
