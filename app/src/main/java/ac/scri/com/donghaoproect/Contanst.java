@@ -13,7 +13,7 @@ public class Contanst {
 
     public static MapParamEntity MAPPARAMENTITY = null;
 
-    public static  String PORT = "7665"; //服务器端口
+    public static  String PORT = "7661"; //服务器端口
 
     public static final int ORDER_INTERVAL = 500 ; //按钮按下命令间隔
 
@@ -49,7 +49,7 @@ public class Contanst {
 
     public static RobotState CURRENTSTATE = RobotState.idle;//当前是状态，默认是空闲
 
-    public static String IP_ADDRESS = "192.168.1.139";
+    public static String IP_ADDRESS = "10.42.0.1";
 
 
     /*

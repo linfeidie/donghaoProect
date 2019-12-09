@@ -37,7 +37,7 @@ public class ControlSendManager {
     private static XTcpClient xTcpClient;
     private static Context mContext = DonghaoApplication.getApplication();
     private static int id = -9;
-    private static int click_count = 1;//描点数
+    public static int click_count = 1;//描点数
 
     public static void  init(Context context,String ipAddress, TcpClientListener listener){
         TcpClientManager.sMXTcpClients.clear();
@@ -264,7 +264,7 @@ public class ControlSendManager {
             poseEntity.setX(x);
             poseEntity.setY(y);
             poseEntity.setZ(0f);
-            poseEntity.setYaw(0f);
+            poseEntity.setYaw(yaw);
             entity.setPose(poseEntity);
             String s = GsonUtil.GsonString(entity)+ "\n";
             xTcpClient.sendMsg(s);

@@ -456,11 +456,30 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }).setWidth(0).setHeight(250).setPosition(Gravity.BOTTOM).show(getSupportFragmentManager());
     }
 
+    /*
+    * 描点走起
+    * */
     public void action(View view) {
+        if(Contanst.CURRENTSTATE != Contanst.RobotState.navi_straight) {
+            Tools.showToast("当前不是直行模式");
+            return;
+        }
         ControlSendManager.set_action();
     }
 
+    /*
+    * 清除描点
+    * */
     public void clearPoints(View view){
+        ControlSendManager.click_count = 1;
         ComBitmapManager.getInstance().clearPoints();
+    }
+
+    /*
+    * 重新获取地图
+    * */
+    public void get_nav_map(View view){
+        //ComBitmapManager.getInstance().clearPoints();
+        ControlSendManager.get_map();
     }
 }

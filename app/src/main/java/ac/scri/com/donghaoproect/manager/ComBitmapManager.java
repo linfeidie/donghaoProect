@@ -35,7 +35,7 @@ public class ComBitmapManager {
     private Matrix matrix = null;
     private Paint paint;//画描点的笔
     private Canvas cv;
-    private Path path;
+    public Path path;
     private Bitmap newbmp; //产生的第三方图
 
 
@@ -59,7 +59,7 @@ public class ComBitmapManager {
         paint.setAntiAlias(true);
         paint.setPathEffect(new CornerPathEffect(5));
 
-        path = new Path();
+
     }
 
 
@@ -150,6 +150,7 @@ public class ComBitmapManager {
         if (points.size() > 1) {
 
 //设置Path
+            path = new Path();
             path.moveTo(points.get(0).left, points.get(0).top);
             for (int i = 1; i < points.size(); i++) {
                 path.lineTo(points.get(i).left, points.get(i).top);
@@ -162,7 +163,9 @@ public class ComBitmapManager {
             cv.drawPoint(points.get(0).left, points.get(0).top, paint);
         }
         if(resetPoint != null) {
+            paint.setColor(Color.BLUE);
             cv.drawPoint(resetPoint.left, resetPoint.top, paint);
+            paint.setColor(Color.GREEN);
         }
         return newbmp;
     }
