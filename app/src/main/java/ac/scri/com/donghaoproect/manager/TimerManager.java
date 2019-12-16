@@ -13,8 +13,8 @@ import ac.scri.com.donghaoproect.Contanst;
  */
 public class TimerManager {
     private static final TimerManager ourInstance = new TimerManager();
-    public Handler mHandler = new Handler();
-    Runnable r;
+    public static Handler mHandler = new Handler();
+    static Runnable r;
     public static TimerManager getInstance() {
         return ourInstance;
     }
@@ -30,7 +30,18 @@ public class TimerManager {
         mHandler.postDelayed(r, Contanst.ORDER_INTERVAL);
     }
 
+    /*
+    * 优化，延迟取消  解决消息队列问题（不知道有没解决）
+    *
+    * */
     public void removeMessage(){
-        mHandler.removeCallbacks(r);
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.removeCallbacks(r);
+            }
+        },100);
+
     }
 }

@@ -4,13 +4,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import ac.scri.com.donghaoproect.Contanst;
-import ac.scri.com.donghaoproect.observer.DataChanger;
-import ac.scri.com.donghaoproect.tool.GsonUtil;
-import ac.scri.com.donghaoproect.tool.Tools;
 import ac.scri.com.donghaoproect.entity.DataEntity;
 import ac.scri.com.donghaoproect.entity.MapParamEntity;
 import ac.scri.com.donghaoproect.entity.ServerInfo;
 import ac.scri.com.donghaoproect.entity.TypeEntity;
+import ac.scri.com.donghaoproect.observer.DataChanger;
+import ac.scri.com.donghaoproect.tool.GsonUtil;
 
 /**
  * 文件描述：.
@@ -51,13 +50,13 @@ public class EntityHandlerManager {
                 //Toast.makeText(this, "地图", Toast.LENGTH_SHORT).show();
                 break;
             case Contanst.GET_GPS:
-                Tools.showToast("GPS");
+                //Tools.showToast("GPS");
                 break;
             case Contanst.GET_PATH:
-                Tools.showToast("路径");
+               // Tools.showToast("路径");
                 break;
             case Contanst.GET_MAP_PARAM:
-                Tools.showToast("地图包信息");
+                //Tools.showToast("地图包信息");
                 MapParamEntity mapParamEntity = GsonUtil.GsonToBean(messageJson,MapParamEntity.class);
                 Contanst.MAPPARAMENTITY = mapParamEntity;
 
@@ -75,7 +74,7 @@ public class EntityHandlerManager {
                 //Log.e("linfd","激光");
                 break;
             case Contanst.SERVER_ACK:
-                Tools.showToast("服务器返回");
+               // Tools.showToast("服务器返回");
                 ServerInfo serverInfo = GsonUtil.GsonToBean(messageJson, ServerInfo.class);
                 if(mHandlerCallback != null) {
                     mHandlerCallback.callback(serverInfo.getState().equalsIgnoreCase("online"));

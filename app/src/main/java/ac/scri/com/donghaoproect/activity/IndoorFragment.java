@@ -60,7 +60,7 @@ public class IndoorFragment extends Fragment {
             if (data instanceof DataEntity) {
                 DataEntity dataEntity = (DataEntity) data;
                 if (dataEntity.getType().equalsIgnoreCase(Contanst.MAP_DATA)) {
-                    Tools.showToast("地图数据");
+                   // Tools.showToast("地图数据");
                     Log.e("linfd", "地图数据");
                     SpliceMap(dataEntity.message);
                 } else if (dataEntity.getType().equalsIgnoreCase(Contanst.GET_STATUS)) {
@@ -226,7 +226,7 @@ public class IndoorFragment extends Fragment {
         HandleSubpackageManager.getInstance(new HandleSubpackageManager.FinishListener() {
             @Override
             public void MapDateFinish(final MapdataEntity supperMapData) {
-                Tools.showToast("完成拼接");
+                //Tools.showToast("完成拼接");
                 Log.e("linfd", "完成拼接");
                 ThreadManager.getInstance().createLongPool().execute(new Runnable() {
                     @Override

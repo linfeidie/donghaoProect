@@ -392,6 +392,9 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         }else if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
             Log.e("linfd", "消");
             TimerManager.getInstance().removeMessage();
+        }else if(motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+            Log.e("linfd", "ACTION_CANCEL");
+            TimerManager.getInstance().removeMessage();
         }
 
         return true;

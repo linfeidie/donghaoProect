@@ -15,7 +15,7 @@ public class Contanst {
 
     public static  String PORT = "7661"; //服务器端口
 
-    public static final int ORDER_INTERVAL = 500 ; //按钮按下命令间隔
+    public static final int ORDER_INTERVAL = 200 ; //按钮按下命令间隔
 
     public static final String GET_STATUS = "robot_status";
 
