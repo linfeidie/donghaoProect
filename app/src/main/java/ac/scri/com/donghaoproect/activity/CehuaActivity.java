@@ -33,7 +33,7 @@ import ac.scri.com.donghaoproect.entity.TypeEntity;
 import ac.scri.com.donghaoproect.listener.OnSimpleSeekChangeListener;
 import ac.scri.com.donghaoproect.listener.PackagesHandleCallback;
 import ac.scri.com.donghaoproect.manager.ComBitmapManager;
-import ac.scri.com.donghaoproect.manager.ControlSendManager;
+import ac.scri.com.donghaoproect.manager.TcpControlSendManager;
 import ac.scri.com.donghaoproect.manager.EntityHandlerManager;
 import ac.scri.com.donghaoproect.manager.TimerManager;
 import ac.scri.com.donghaoproect.nicedialog.BaseNiceDialog;
@@ -122,8 +122,8 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Contanst.CARID = onlineIdsEntity.getIds().get(i);
-                ControlSendManager.set_connet();
-                ControlSendManager.get_map();
+                TcpControlSendManager.set_connet();
+                TcpControlSendManager.get_map();
             }
 
             @Override
@@ -215,7 +215,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 //TimerManager.getInstance().removeMessage();
-                ControlSendManager.stop();
+                TcpControlSendManager.stop();
                 return false;
             }
         });
@@ -237,7 +237,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Contanst.CURRENTSTATE = Contanst.RobotState.valueOf(STATE_ITEMS[i]);
-                ControlSendManager.set_work_mode(Contanst.CURRENTSTATE.name());
+                TcpControlSendManager.set_work_mode(Contanst.CURRENTSTATE.name());
             }
 
             @Override
@@ -250,7 +250,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
 
                 if (isChecked) {
-                    ControlSendManager.init(CehuaActivity.this, ip_address.getIpAddress(), new PackagesHandleCallback() {
+                    TcpControlSendManager.init(CehuaActivity.this, ip_address.getIpAddress(), new PackagesHandleCallback() {
                         @Override
                         public void messageCallback(TypeEntity typeEntity, String message) {
                             EntityHandlerManager.handerEntity(typeEntity, message, new EntityHandlerManager.HandlerCallback() {
@@ -280,9 +280,9 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
 //                            }
                         }
                     });
-                    ControlSendManager.connect();
+                    TcpControlSendManager.connect();
                 } else {
-                    ControlSendManager.disconnect();
+                    TcpControlSendManager.disconnect();
                 }
 //                if(switch_button.isChecked()) {
 //                    switch_button.setChecked(true);
@@ -300,7 +300,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         viewpager = findViewById(R.id.viewpager);
 
         // create new fragments
-       // pages.add(new BaiduFragment());
+        pages.add(new BaiduFragment());
         pages.add(new IndoorFragment());
 
         // set adapter
@@ -357,7 +357,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     TimerManager.getInstance().start(new LooperRunnable() {
                         @Override
                         public void call() {
-                            ControlSendManager.forward();
+                            TcpControlSendManager.forward();
                         }
                     });
                     break;
@@ -366,7 +366,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     TimerManager.getInstance().start(new LooperRunnable() {
                         @Override
                         public void call() {
-                            ControlSendManager.leftward();
+                            TcpControlSendManager.leftward();
                         }
                     });
                     break;
@@ -375,7 +375,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     TimerManager.getInstance().start(new LooperRunnable() {
                         @Override
                         public void call() {
-                            ControlSendManager.rightward();
+                            TcpControlSendManager.rightward();
                         }
                     });
                     break;
@@ -384,7 +384,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                     TimerManager.getInstance().start(new LooperRunnable() {
                         @Override
                         public void call() {
-                            ControlSendManager.backward();
+                            TcpControlSendManager.backward();
                         }
                     });
                     break;
@@ -447,7 +447,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
                 holder.setOnClickListener(R.id.tv_sure, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()), sb_angular.getProgressFloat(), sb_distance.getProgressFloat() > 0 ? 0.3 : -0.3, sb_angular.getProgressFloat() > 0 ? 0.3 : -0.3);
+                        TcpControlSendManager.set_distance(Math.abs(sb_distance.getProgressFloat()), sb_angular.getProgressFloat(), sb_distance.getProgressFloat() > 0 ? 0.3 : -0.3, sb_angular.getProgressFloat() > 0 ? 0.3 : -0.3);
                         sb_distance.setProgress(0);
                         sb_angular.setProgress(0);
                         dialog.dismiss();
@@ -467,14 +467,14 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
             Tools.showToast("当前不是直行模式");
             return;
         }
-        ControlSendManager.set_action();
+        TcpControlSendManager.set_action();
     }
 
     /*
     * 清除描点
     * */
     public void clearPoints(View view){
-        ControlSendManager.click_count = 1;
+        TcpControlSendManager.click_count = 1;
         ComBitmapManager.getInstance().clearPoints();
     }
 
@@ -483,6 +483,6 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
     * */
     public void get_nav_map(View view){
         //ComBitmapManager.getInstance().clearPoints();
-        ControlSendManager.get_map();
+        TcpControlSendManager.get_map();
     }
 }

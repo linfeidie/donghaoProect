@@ -24,7 +24,7 @@ import ac.scri.com.donghaoproect.entity.DataEntity;
 import ac.scri.com.donghaoproect.entity.MapdataEntity;
 import ac.scri.com.donghaoproect.entity.SatusEntity;
 import ac.scri.com.donghaoproect.manager.ComBitmapManager;
-import ac.scri.com.donghaoproect.manager.ControlSendManager;
+import ac.scri.com.donghaoproect.manager.TcpControlSendManager;
 import ac.scri.com.donghaoproect.manager.HandleSubpackageManager;
 import ac.scri.com.donghaoproect.manager.ObtainMapManager;
 import ac.scri.com.donghaoproect.manager.ThreadManager;
@@ -148,7 +148,7 @@ public class IndoorFragment extends Fragment {
                 if (action == JoystickView.ACTION_RELEASE){
                     //取消
                     ComBitmapManager.getInstance().clearResetPoint();
-                    ControlSendManager.set_init_pose(xServer,yServer,yaw);
+                    TcpControlSendManager.set_init_pose(xServer,yServer,yaw);
                     joystickView.setVisibility(View.GONE);
                     cb_init_post.setChecked(false);
                 } else {
@@ -208,7 +208,7 @@ public class IndoorFragment extends Fragment {
                     Rect rect = new Rect(touchX, touchY, 0, 0);
                     ComBitmapManager.getInstance().addTouchPoint(rect);
 
-                    ControlSendManager.set_click_point(xServer, yServer);
+                    TcpControlSendManager.set_click_point(xServer, yServer);
                 }
 
                 return false;

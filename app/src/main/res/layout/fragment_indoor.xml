@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="fitCenter"
-    android:src="@mipmap/bitmap_empty"
+    android:src="@mipmap/map"
     />
     <me.caibou.rockerview.JoystickView
         android:id="@+id/joystick"

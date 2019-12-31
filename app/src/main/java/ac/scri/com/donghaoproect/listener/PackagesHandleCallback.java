@@ -10,7 +10,7 @@ import ac.scri.com.donghaoproect.Contanst;
 import ac.scri.com.donghaoproect.entity.DataEntity;
 import ac.scri.com.donghaoproect.entity.MapdataEntity;
 import ac.scri.com.donghaoproect.entity.TypeEntity;
-import ac.scri.com.donghaoproect.manager.ControlSendManager;
+import ac.scri.com.donghaoproect.manager.TcpControlSendManager;
 import ac.scri.com.donghaoproect.observer.DataChanger;
 import ac.scri.com.donghaoproect.tool.GsonUtil;
 import ac.scri.com.donghaoproect.tool.Tools;
@@ -32,8 +32,8 @@ public abstract class PackagesHandleCallback implements TcpClientListener {
         flag = true;
         Tools.showToast(xTcpClient.getTargetInfo().getIp() + "连接成功");
 
-        ControlSendManager.set_online();//注册
-        ControlSendManager.get_online_ids();// 获取ids
+        TcpControlSendManager.set_online();//注册
+        TcpControlSendManager.get_online_ids();// 获取ids
 
     }
 

@@ -33,7 +33,7 @@ import ac.scri.com.donghaoproect.tool.Tools;
  * <p>
  * 版本号：donghaoProect
  */
-public class ControlSendManager {
+public class TcpControlSendManager {
     private static XTcpClient xTcpClient;
     private static Context mContext = DonghaoApplication.getApplication();
     private static int id = -9;

@@ -14,7 +14,7 @@ import java.util.TimerTask;
 
 import ac.scri.com.donghaoproect.LooperRunnable;
 import ac.scri.com.donghaoproect.R;
-import ac.scri.com.donghaoproect.manager.ControlSendManager;
+import ac.scri.com.donghaoproect.manager.TcpControlSendManager;
 import ac.scri.com.donghaoproect.manager.ThreadManager;
 import ac.scri.com.donghaoproect.manager.TimerManager;
 
@@ -40,7 +40,7 @@ public class SocetTestActivity extends AppCompatActivity  {
 //                EntityHandlerManager.handerEntity(typeEntity, message);
 //            }
 //        });
-        ControlSendManager.connect();
+        TcpControlSendManager.connect();
         // startGetGSP();
         bt_rotate = findViewById(R.id.bt_rotate);
         iv_map = (ImageView) findViewById(R.id.iv_map);
@@ -73,11 +73,11 @@ public class SocetTestActivity extends AppCompatActivity  {
 
 
     public void get_status(View view) {
-        ControlSendManager.get_status();
+        TcpControlSendManager.get_status();
     }
 
     public void get_GPS(View view) {
-        ControlSendManager.get_GPS();
+        TcpControlSendManager.get_GPS();
     }
 
     public void stop(View view) {
@@ -93,7 +93,7 @@ public class SocetTestActivity extends AppCompatActivity  {
                     @Override
                     public void run() {
                         try {
-                            ControlSendManager.get_GPS();
+                            TcpControlSendManager.get_GPS();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -105,7 +105,7 @@ public class SocetTestActivity extends AppCompatActivity  {
     }
 
     public void set_speed(View view) {
-        ControlSendManager.set_speed(0, 0.1);
+        TcpControlSendManager.set_speed(0, 0.1);
     }
 
     public void set_distance(View view) {
@@ -113,19 +113,19 @@ public class SocetTestActivity extends AppCompatActivity  {
     }
 
     public void set_work_mode(View view) {
-        ControlSendManager.set_work_mode("charging");
+        TcpControlSendManager.set_work_mode("charging");
     }
 
     public void set_max_speed(View view) {
-        ControlSendManager.set_max_speed(1.5, 1.5);
+        TcpControlSendManager.set_max_speed(1.5, 1.5);
     }
 
     public void get_map(View view) {
-        ControlSendManager.get_map();
+        TcpControlSendManager.get_map();
     }
 
     public void get_path(View view) {
-        ControlSendManager.get_path();
+        TcpControlSendManager.get_path();
     }
 }
 
