@@ -39,6 +39,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.SettingActivity"></activity>
+        <service android:name=".activity.PollingService">
+            <intent-filter>
+                <action android:name="com.ryantang.service.PollingService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -33,6 +33,7 @@ import ac.scri.com.donghaoproect.entity.TypeEntity;
 import ac.scri.com.donghaoproect.listener.OnSimpleSeekChangeListener;
 import ac.scri.com.donghaoproect.listener.PackagesHandleCallback;
 import ac.scri.com.donghaoproect.manager.ComBitmapManager;
+import ac.scri.com.donghaoproect.manager.HeartbeatManager;
 import ac.scri.com.donghaoproect.manager.TcpControlSendManager;
 import ac.scri.com.donghaoproect.manager.EntityHandlerManager;
 import ac.scri.com.donghaoproect.manager.TimerManager;
@@ -176,6 +177,7 @@ public class CehuaActivity extends AppCompatActivity implements ViewPager.OnPage
         initView();
         // ip_address.setIpAddress("192.168.1.107");
         ip_address.setIpAddress(Contanst.IP_ADDRESS);
+        HeartbeatManager.getInstance().start();
     }
 
 
